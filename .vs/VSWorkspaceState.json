@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\js",
-    "\\libs\\apexcharts",
-    "\\libs\\bootstrap\\dist"
+    "\\js"
   ],
-  "SelectedNode": "\\js\\dashboard.js",
+  "SelectedNode": "\\index.html",
   "PreviewInSolutionExplorer": false
 }
