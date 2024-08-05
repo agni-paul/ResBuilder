@@ -22,7 +22,7 @@ $(function () {
     },
 
 
-      colors: ["#B2EBF2", "#E57373", "#FDD835"],
+      colors: ["#616161", "#C9CACB", "#799EC3"],
 
 
     plotOptions: {
@@ -114,7 +114,7 @@ $(function () {
     series: [6],
     labels: ["Critical"],
     chart: {
-        width: 180,
+        width: 220,
         type: "donut",
         fontFamily: "Plus Jakarta Sans', sans-serif",
         foreColor: "#FFFAFA",
@@ -124,8 +124,8 @@ $(function () {
         startAngle: 0,
         endAngle: 250,
         donut: {
-            size: '75%',
-            background: "#adb0bb",
+            size: '95%',
+            background: "#F2383A",
             labels: {
                 show: true,
                 name: {
@@ -150,7 +150,7 @@ $(function () {
     legend: {
       show: false,
     },
-      colors: ["#EF5350"],
+      colors: ["#D81B60"],
 
     responsive: [
       {
@@ -179,7 +179,7 @@ $(function () {
         series: [20],
         labels: ["Moderate"],
         chart: {
-            width: 250,
+            width: 280,
             type: "donut",
             fontFamily: "Plus Jakarta Sans', sans-serif",
             foreColor: "#FFFAFA",
@@ -189,7 +189,7 @@ $(function () {
                 startAngle: 0,
                 endAngle: 230,
                 donut: {
-                    size: '75%',
+                    size: '95%',
                     background: "#adb0bb",
                     labels: {
                         show: true,
@@ -215,7 +215,7 @@ $(function () {
         legend: {
             show: false,
         },
-        colors: ["#FBC02D"],
+        colors: ["A19E9E"],
 
         responsive: [
             {
@@ -244,7 +244,7 @@ $(function () {
         series: [10],
         labels: ["Minor"],
         chart: {
-            width: 230,
+            width: 240,
             type: "donut",
             fontFamily: "Plus Jakarta Sans', sans-serif",
             foreColor: "#FFFAFA",
@@ -254,7 +254,7 @@ $(function () {
                 startAngle: 0,
                 endAngle: 250,
                 donut: {
-                    size: '75%',
+                    size: '95%',
                     background: "#adb0bb",
                     labels: {
                         show: true,
@@ -280,7 +280,7 @@ $(function () {
         legend: {
             show: false,
         },
-        colors: ["#AED581"],
+        colors: ["A19E9E"],
 
         responsive: [
             {
@@ -309,7 +309,7 @@ $(function () {
         series: [9],
         labels: ["Major"],
         chart: {
-            width: 200,
+            width: 230,
             type: "donut",
             fontFamily: "Plus Jakarta Sans', sans-serif",
             foreColor: "#FFFAFA",
@@ -319,8 +319,8 @@ $(function () {
                 startAngle: 0,
                 endAngle: 280,
                 donut: {
-                    size: '75%',
-                    background: "#adb0bb",
+                    size: '95%',
+                    background: "#799EC3",
                     labels: {
                         show: true,
                         name: {
@@ -345,7 +345,7 @@ $(function () {
         legend: {
             show: false,
         },
-        colors: ["#42A5F5"],
+        colors: ["#799EC3"],
 
         responsive: [
             {
