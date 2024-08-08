@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\css",
+    "\\js",
     "\\libs"
   ],
-  "SelectedNode": "\\js",
+  "SelectedNode": "\\js\\dashboard.js",
   "PreviewInSolutionExplorer": false
 }
