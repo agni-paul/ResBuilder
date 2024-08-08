@@ -7,10 +7,12 @@
     <title>ResBuilder</title>
     <link rel="shortcut icon" type="image/png" href="./images/logos/favicon.png" />
     <link rel="stylesheet" href="./css/styles.min.css" />
+    <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.css" />
+    <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.min.css" />
     <link rel="stylesheet" href="/path/to/leaflet.css" />
 </head>
 
-<body>
+<body onload="init()">
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
          data-sidebar-position="fixed" data-header-position="fixed">
@@ -278,10 +280,10 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-primary m-1">Accountant</button></td>
+                                                <td id="dragparent1" class="border-bottom-0"><button type="button" class="btn btn-outline-primary m-1">Accountant</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">26</h6>
-                                                    <span class="fw-normal">Display info</span> 
+                                                    <span class="fw-normal">Display info</span>
                                                 </td>
                                                 <td class="border-bottom-0">
                                                     <h6 class="mb-1 fw-semibold">9</h6>
@@ -296,7 +298,7 @@
                                                 </td> -->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-secondary m-1">Beer Taster</button></td>
+                                                <td id="dragparent2" class="border-bottom-0"><button type="button" class="btn btn-outline-secondary m-1">Beer Taster</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">19</h6>
                                                 </td>
@@ -310,7 +312,7 @@
                                                 </td>-->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Botanist</button></td>
+                                                <td id="dragparent3" class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Botanist</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">48</h6>
                                                 </td>
@@ -324,7 +326,7 @@
                                                 </td>-->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-dark m-1">Business Analyst</button></td>
+                                                <td id="dragparent4" class="border-bottom-0"><button type="button" class="btn btn-outline-dark m-1">Business Analyst</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">32</h6>
                                                 </td>
@@ -338,7 +340,7 @@
                                                 </td>-->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Sales</button></td>
+                                                <td id="dragparent5" class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Sales</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">16</h6>
                                                 </td>
@@ -381,10 +383,10 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-primary m-1">Accountant</button></td>
+                                                <td id="dragparent6" class="border-bottom-0"><button type="button" class="btn btn-outline-primary m-1">Accountant</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">26</h6>
-                                                    <span class="fw-normal">Display info</span> 
+                                                    <span class="fw-normal">Display info</span>
                                                 </td>
                                                 <td class="border-bottom-0">
                                                     <h6 class="mb-1 fw-semibold">9</h6>
@@ -399,7 +401,7 @@
                                                 </td> -->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-secondary m-1">Beer Taster</button></td>
+                                                <td id="dragparent7" class="border-bottom-0"><button type="button" class="btn btn-outline-secondary m-1">Beer Taster</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">19</h6>
                                                 </td>
@@ -413,7 +415,7 @@
                                                 </td>-->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Botanist</button></td>
+                                                <td id="dragparent8" class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Botanist</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">48</h6>
                                                 </td>
@@ -427,7 +429,7 @@
                                                 </td>-->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-dark m-1">Business Analyst</button></td>
+                                                <td id="dragparent9" class="border-bottom-0"><button type="button" class="btn btn-outline-dark m-1">Business Analyst</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">32</h6>
                                                 </td>
@@ -441,7 +443,7 @@
                                                 </td>-->
                                             </tr>
                                             <tr>
-                                                <td class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Sales</button></td>
+                                                <td id="dragparent10" class="border-bottom-0"><button type="button" class="btn btn-outline-info m-1">Sales</button></td>
                                                 <!--<td class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-1">16</h6>
                                                 </td>
@@ -561,6 +563,8 @@
     <script src="./libs/apexcharts/dist/apexcharts.esm.js"></script>
     <script src="./libs/simplebar/dist/simplebar.js"></script>
     <script src="./js/dashboard.js"></script>
+    <script src="./libs/dragula-master/dist/dragula.min.js"></script>
+    <script src="./libs/dragula-master/dist/dragula.js"></script>
     <script src="/path/to/leaflet.js"></script>
 </body>
 

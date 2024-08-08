@@ -1,3 +1,16 @@
+function init() {
+    dragula([document.querySelector("#dragparent1")]);
+    dragula([document.querySelector("#dragparent2")]);
+    dragula([document.querySelector("#dragparent3")]);
+    dragula([document.querySelector("#dragparent4")]);
+    dragula([document.querySelector("#dragparent5")]);
+    dragula([document.querySelector("#dragparent6")]);
+    dragula([document.querySelector("#dragparent7")]);
+    dragula([document.querySelector("#dragparent8")]);
+    dragula([document.querySelector("#dragparent9")]);
+    dragula([document.querySelector("#dragparent10")]);
+}
+
 $(function () {
 
 
