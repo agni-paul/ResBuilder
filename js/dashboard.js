@@ -1,14 +1,14 @@
 function init() {
-    dragula([document.querySelector("#dragparent1")]);
-    dragula([document.querySelector("#dragparent2")]);
-    dragula([document.querySelector("#dragparent3")]);
-    dragula([document.querySelector("#dragparent4")]);
-    dragula([document.querySelector("#dragparent5")]);
-    dragula([document.querySelector("#dragparent6")]);
-    dragula([document.querySelector("#dragparent7")]);
-    dragula([document.querySelector("#dragparent8")]);
-    dragula([document.querySelector("#dragparent9")]);
-    dragula([document.querySelector("#dragparent10")]);
+    dragula([document.querySelector("#dragparent1"), document.querySelector("#dragparent2")]);
+    dragula([document.querySelector("#dragparent2"), document.querySelector("#dragparent1")]);
+    //dragula([document.querySelector("#dragparent3"), document.querySelector("#dragparent6"), document.querySelector("#dragparent7"), document.querySelector("#dragparent8"), document.querySelector("#dragparent9"), document.querySelector("#dragparent10")]);
+    //dragula([document.querySelector("#dragparent4"), document.querySelector("#dragparent6"), document.querySelector("#dragparent7"), document.querySelector("#dragparent8"), document.querySelector("#dragparent9"), document.querySelector("#dragparent10")]);
+    //dragula([document.querySelector("#dragparent5"), document.querySelector("#dragparent6"), document.querySelector("#dragparent7"), document.querySelector("#dragparent8"), document.querySelector("#dragparent9"), document.querySelector("#dragparent10")]);
+    //dragula([document.querySelector("#dragparent6"), document.querySelector("#dragparent1"), document.querySelector("#dragparent2"), document.querySelector("#dragparent3"), document.querySelector("#dragparent4"), document.querySelector("#dragparent5")]);
+    //dragula([document.querySelector("#dragparent7"), document.querySelector("#dragparent1"), document.querySelector("#dragparent2"), document.querySelector("#dragparent3"), document.querySelector("#dragparent4"), document.querySelector("#dragparent5")]);
+    //dragula([document.querySelector("#dragparent8"), document.querySelector("#dragparent1"), document.querySelector("#dragparent2"), document.querySelector("#dragparent3"), document.querySelector("#dragparent4"), document.querySelector("#dragparent5")]);
+    //dragula([document.querySelector("#dragparent9"), document.querySelector("#dragparent1"), document.querySelector("#dragparent2"), document.querySelector("#dragparent3"), document.querySelector("#dragparent4"), document.querySelector("#dragparent5")]);
+    //dragula([document.querySelector("#dragparent10"), document.querySelector("#dragparent6"), document.querySelector("#dragparent7"), document.querySelector("#dragparent8"), document.querySelector("#dragparent9"), document.querySelector("#dragparent10")]);
 }
 
 $(function () {
