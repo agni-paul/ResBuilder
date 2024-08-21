@@ -3,7 +3,10 @@
     "",
     "\\css",
     "\\js",
-    "\\libs"
+    "\\libs",
+    "\\libs\\dragula-master",
+    "\\libs\\dragula-master\\dist"
   ],
+  "SelectedNode": "\\js\\dashboard.js",
   "PreviewInSolutionExplorer": false
 }
