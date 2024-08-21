@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/styles.min.css" />
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.css" />
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.min.css" />
+    <link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />
     <link rel="stylesheet" href="/path/to/leaflet.css" />
 </head>
 
@@ -189,7 +190,6 @@
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                            <!--<a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a>-->
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                                    aria-expanded="false">
@@ -221,7 +221,7 @@
             <div class="container-fluid">
                 <!--  Row 1 -->
                 <div class="row">
-                    <div class="col-lg-8 d-flex align-items-strech">
+                    <div class="col-lg-11 d-flex align-items-strech">
                         <div class="card w-100">
                             <div class="card-body">
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
@@ -231,22 +231,24 @@
                                     </div>
                                     <div>
                                         <select class="form-select">
-                                            <option value="1">Entity</option>
-                                            <option value="2">People Roles</option>
-                                            <option value="3">Locations</option>
-                                            <option value="4">Applications</option>
-                                            <option value="5">Hardware</option>
-                                            <option value="6">Suppliers</option>
+                                            <option value="1">Select Entity</option>
+                                            <option value="2">Bank of ResBuilder Ltd</option>
                                         </select>
                                     </div>
                                     <div>
                                         <select class="form-select">
-                                            <option value="1">Value</option>
-                                            <option value="2">1</option>
-                                            <option value="3">2</option>
-                                            <option value="4">3</option>
-                                            <option value="5">4</option>
-                                            <option value="5">5</option>
+                                            <option value="1">Select service</option>
+                                            <option value="2">Car Loan Service</option>
+                                            <option value="3">Mortgage Loan Service</option>
+                                            <option value="4">Commercial Loan Service</option>
+                                            <option value="5">Corporate Loan Service</option>
+                                            <option value="6">Business Loan Service</option>
+                                            <option value="7">Domestic Payment Service Inbound</option>
+                                            <option value="8">Domestic Payment Service Outbound</option>
+                                            <option value="9">Debit Card Service</option>
+                                            <option value="10">Credit Card Service</option>
+                                            <option value="11">International Payment Service Inbound</option>
+                                            <option value="12">International Payment Service Outbound</option>
                                         </select>
                                     </div>
                                 </div>
@@ -255,26 +257,124 @@
                     </div>
 
                 </div>
-
                 <div class="row">
                     <div class="col-lg-3 d-flex align-items-stretch">
-                        <div class="card w-100">
-                            <div id="dragparent1" class="card-body p-4">
-                                <button type="button" class="btn btn-outline-primary m-1">Accountant</button>
-                                <button type="button" class="btn btn-outline-primary m-1">Beer Taster</button>
-                                <button type="button" class="btn btn-outline-primary m-1">Botanist</button>
-                                <button type="button" class="btn btn-outline-primary m-1">Business Analyst</button>
-                                <button type="button" class="btn btn-outline-primary m-1">Sales</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 d-flex align-items-stretch">
-                        <div id="dragparent2" class="card w-100">
+                        <div id="dragparent1" class="card w-100">
                             <button type="button" class="btn btn-outline-primary m-1">Accountant</button>
                             <button type="button" class="btn btn-outline-primary m-1">Beer Taster</button>
                             <button type="button" class="btn btn-outline-primary m-1">Botanist</button>
                             <button type="button" class="btn btn-outline-primary m-1">Business Analyst</button>
                             <button type="button" class="btn btn-outline-primary m-1">Sales</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex align-items-stretch">
+                        <div id="dragparent2" class="card w-100">
+                            
+                                <!--content inner-->
+                                
+                                    <!--tabs-->
+                                    <div class="tabs">
+                                        <!--tabs navigation-->
+                                        <div class="tabs__nav">
+                                            <ul class="tabs__nav-list">
+                                                <li class="tabs__nav-item js-active">People</li>
+                                                <li class="tabs__nav-item">Locations</li>
+                                                <li class="tabs__nav-item">Applications</li>
+                                                <li class="tabs__nav-item">Hardware</li>
+                                                <li class="tabs__nav-item">Suppliers</li>
+                                                <li class="tabs__nav-item">Data</li>
+                                            </ul>
+                                        </div>
+                                        <!--tabs panels-->
+                                        <div class="tabs__panels">
+                                            <!--single panel-->
+                                            <div class="tabs__panel">
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-avatar"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                            </div>
+                                            <!--single panel-->
+                                            <div class="tabs__panel">
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card tabs__panel-card--spaced-between">
+                                                    <div class="tabs__panel-img"></div>
+                                                    <div class="tabs__panel-img"></div>
+                                                    <div class="tabs__panel-img"></div>
+                                                </div>
+                                            </div>
+                                            <!--single panel-->
+                                            <div class="tabs__panel">
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-img"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-img"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                            </div>
+                                            <!--single panel-->
+                                            <div class="tabs__panel">
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                            </div>
+                                            <!--single panel-->
+                                            <div class="tabs__panel">
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                            </div>
+                                            <!--single panel-->
+                                            <div class="tabs__panel">
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                                <div class="tabs__panel-card">
+                                                    <div class="tabs__panel-content"></div>
+                                                    <div class="tabs__panel-content"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                            
                         </div>
                     </div>
                 </div>
@@ -378,8 +478,9 @@
     <script src="./libs/apexcharts/dist/apexcharts.esm.js"></script>
     <script src="./libs/simplebar/dist/simplebar.js"></script>
     <script src="./js/dashboard.js"></script>
-    <script src="./libs/dragula-master/dist/dragula.min.js"></script>
     <script src="./libs/dragula-master/dist/dragula.js"></script>
+    <script src="./libs/dragula-master/dist/dragula.min.js"></script>
+    <script src="./libs/tabmaster/tabscript.js"></script>
     <script src="/path/to/leaflet.js"></script>
 </body>
 
