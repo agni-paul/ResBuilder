@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/styles.min.css" />
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.css" />
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.min.css" />
-    <link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />
+    <!--<link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />-->
     <link rel="stylesheet" href="/path/to/leaflet.css" />
 </head>
 
@@ -269,112 +269,36 @@
                     </div>
                     <div class="col-lg-8 d-flex align-items-stretch">
                         <div id="dragparent2" class="card w-100">
-                            
-                                <!--content inner-->
-                                
-                                    <!--tabs-->
-                                    <div class="tabs">
-                                        <!--tabs navigation-->
-                                        <div class="tabs__nav">
-                                            <ul class="tabs__nav-list">
-                                                <li class="tabs__nav-item js-active">People</li>
-                                                <li class="tabs__nav-item">Locations</li>
-                                                <li class="tabs__nav-item">Applications</li>
-                                                <li class="tabs__nav-item">Hardware</li>
-                                                <li class="tabs__nav-item">Suppliers</li>
-                                                <li class="tabs__nav-item">Data</li>
-                                            </ul>
-                                        </div>
-                                        <!--tabs panels-->
-                                        <div class="tabs__panels">
-                                            <!--single panel-->
-                                            <div class="tabs__panel">
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-avatar"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                            </div>
-                                            <!--single panel-->
-                                            <div class="tabs__panel">
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card tabs__panel-card--spaced-between">
-                                                    <div class="tabs__panel-img"></div>
-                                                    <div class="tabs__panel-img"></div>
-                                                    <div class="tabs__panel-img"></div>
-                                                </div>
-                                            </div>
-                                            <!--single panel-->
-                                            <div class="tabs__panel">
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-img"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-img"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                            </div>
-                                            <!--single panel-->
-                                            <div class="tabs__panel">
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                            </div>
-                                            <!--single panel-->
-                                            <div class="tabs__panel">
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                            </div>
-                                            <!--single panel-->
-                                            <div class="tabs__panel">
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                                <div class="tabs__panel-card">
-                                                    <div class="tabs__panel-content"></div>
-                                                    <div class="tabs__panel-content"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
-                            
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                              <li class="nav-item">
+                                <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="location-tab" data-toggle="tab" href="#location" role="tab" aria-controls="location" aria-selected="false">Location</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="applications-tab" data-toggle="tab" href="#applications" role="tab" aria-controls="applications" aria-selected="false">Applications</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="hardware-tab" data-toggle="tab" href="#hardware" role="tab" aria-controls="hardware" aria-selected="false">Hardware</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="suppliers-tab" data-toggle="tab" href="#suppliers" role="tab" aria-controls="suppliers" aria-selected="false">Suppliers</a>
+                              </li>
+                              <li class="nav-item">
+                                <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</a>
+                              </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+                              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                              <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                            </div>
+                            <!--<button type="button" class="btn btn-outline-primary m-1">Accountant</button>
+                            <button type="button" class="btn btn-outline-primary m-1">Beer Taster</button>
+                            <button type="button" class="btn btn-outline-primary m-1">Botanist</button>
+                            <button type="button" class="btn btn-outline-primary m-1">Business Analyst</button>
+                            <button type="button" class="btn btn-outline-primary m-1">Sales</button>-->
                         </div>
                     </div>
                 </div>
@@ -472,6 +396,12 @@
     </div>
     <script src="./libs/jquery/dist/jquery.min.js"></script>
     <script src="./libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+   $('#myTab a').click(function (e) {
+     e.preventDefault()
+     $(this).tab('show')
+   })
+</script>
     <script src="./js/sidebarmenu.js"></script>
     <script src="./js/app.min.js"></script>
     <script src="./libs/apexcharts/dist/apexcharts.min.js"></script>
@@ -480,7 +410,7 @@
     <script src="./js/dashboard.js"></script>
     <script src="./libs/dragula-master/dist/dragula.js"></script>
     <script src="./libs/dragula-master/dist/dragula.min.js"></script>
-    <script src="./libs/tabmaster/tabscript.js"></script>
+    <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
     <script src="/path/to/leaflet.js"></script>
 </body>
 
