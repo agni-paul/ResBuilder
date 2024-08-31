@@ -11,6 +11,89 @@
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.min.css" />
     <!--<link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />-->
     <link rel="stylesheet" href="/path/to/leaflet.css" />
+    <style>
+
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: #343a40;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+        }
+
+        .scrollable-zone {
+            max-height: 300px; /* Adjust the height as needed */
+            overflow-y: auto;
+            padding-right: 10px; /* Prevents content from hiding behind the scrollbar */
+        }
+        
+        .item {
+            padding: 12px;
+            margin: 6px 0;
+            background-color: #DBE6F2;
+            color: #000000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .item:hover {
+            background-color: #9ab4d0;
+        }
+
+        .tab-content {
+            display: flex;
+            flex-direction: column;
+            min-height: 250px;
+            overflow: hidden;
+        }
+
+        .tab-pane {
+            flex-grow: 1;
+            background: #f1f3f5;
+            border-radius: 8px;
+            padding: 15px;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .tab-pane.show {
+            opacity: 1;
+        }
+
+        .nav-tabs .nav-link {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 10px 15px;
+            margin: 0 2px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #007bff;
+        }
+
+        .modal-content {
+            border-radius: 8px;
+        }
+
+        .modal-header, .modal-body, .modal-footer {
+            border: none;
+        }
+
+        .modal-footer button {
+            border-radius: 4px;
+        }
+    </style>
 </head>
 
 <body onload="init()">
@@ -255,55 +338,98 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 d-flex align-items-stretch">
-                        <div id="dragparent1" class="card w-100">
-                            <button type="button" class="btn btn-outline-primary m-1">Accountant</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Beer Taster</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Botanist</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Business Analyst</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Sales</button>
+                    <div class="col-lg-2 d-flex align-items-stretch">
+                        <div class="container card" id="left-container">
+                            <!-- Search box for filtering items -->
+                            <div class="mb-3">
+                                <input type="text" id="searchBox" class="form-control" placeholder="Search...">
+                            </div>
+                            <!-- Scrollable container for items -->
+                            <div class="scrollable-zone" id="scrollable-zone">
+                                <button class="item btn btn-light">Item 1</button>
+                                <button class="item btn btn-light">Item 2</button>
+                                <button class="item btn btn-light">Item 3</button>
+                                <button class="item btn btn-light">Item 4</button>
+                                <button class="item btn btn-light">Item 5</button>
+                                <button class="item btn btn-light">Item 6</button>
+                                <button class="item btn btn-light">Item 7</button>
+                                <button class="item btn btn-light">Item 8</button>
+                                <button class="item btn btn-light">Item 9</button>
+                                <button class="item btn btn-light">Item 10</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-8 d-flex align-items-stretch">
-                        <div id="dragparent2" class="card w-100">
+                    <!-- Bootstrap Tabs for Zone 2 -->
+                        <div class="container card col-lg-8 align-items-stretch">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                              <li class="nav-item">
-                                <a class="nav-link active" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" id="location-tab" data-toggle="tab" href="#location" role="tab" aria-controls="location" aria-selected="false">Location</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" id="applications-tab" data-toggle="tab" href="#applications" role="tab" aria-controls="applications" aria-selected="false">Applications</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" id="hardware-tab" data-toggle="tab" href="#hardware" role="tab" aria-controls="hardware" aria-selected="false">Hardware</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" id="suppliers-tab" data-toggle="tab" href="#suppliers" role="tab" aria-controls="suppliers" aria-selected="false">Suppliers</a>
-                              </li>
-                              <li class="nav-item">
-                                <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</a>
-                              </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="people-tab" data-bs-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="location-tab" data-bs-toggle="tab" href="#location" role="tab" aria-controls="location" aria-selected="false">Location</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="applications-tab" data-bs-toggle="tab" href="#applications" role="tab" aria-controls="applications" aria-selected="false">Applications</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="hardware-tab" data-bs-toggle="tab" href="#hardware" role="tab" aria-controls="hardware" aria-selected="false">Hardware</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="suppliers-tab" data-bs-toggle="tab" href="#suppliers" role="tab" aria-controls="suppliers" aria-selected="false">Suppliers</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="data-tab" data-bs-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</button>
+                                </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                              <div class="tab-pane fade show active" id="people" role="tabpanel" aria-labelledby="people-tab">...</div>
-                              <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">@@@</div>
-                              <div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="applications-tab">+++</div>
-                              <div class="tab-pane fade" id="hardware" role="tabpanel" aria-labelledby="hardware-tab">^^^</div>
-                              <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab">***</div>
-                              <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">///</div>
+                                <div class="tab-pane fade show active" id="people" role="tabpanel" aria-labelledby="people-tab"></div>
+                                <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab"></div>
+                                <div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="applications-tab"></div>
+                                <div class="tab-pane fade" id="hardware" role="tabpanel" aria-labelledby="hardware-tab"></div>
+                                <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab"></div>
+                                <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab"></div>
                             </div>
-                            <!--<button type="button" class="btn btn-outline-primary m-1">Accountant</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Beer Taster</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Botanist</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Business Analyst</button>
-                            <button type="button" class="btn btn-outline-primary m-1">Sales</button>-->
                         </div>
-                    </div>
+
+                        <!-- Bootstrap Modal for Confirming Drop -->
+                        <div class="modal fade" id="dropModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel">Confirm Drop</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Do you want to move this item to the selected tab?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="confirmBtn">Yes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bootstrap Modal for Removing Item -->
+                        <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="removeModalLabel">Remove Item</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Do you want to remove this item and move it back to the first container?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="removeCancelBtn" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="removeConfirmBtn">Yes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                    
                 </div>
                 <div class="row">
                     <!--<div class="col-sm-6 col-xl-3">
@@ -399,12 +525,6 @@
     </div>
     <script src="./libs/jquery/dist/jquery.min.js"></script>
     <script src="./libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-   $('#myTab a').click(function (e) {
-     e.preventDefault()
-     $(this).tab('show')
-   })
-</script>
     <script src="./js/sidebarmenu.js"></script>
     <script src="./js/app.min.js"></script>
     <script src="./libs/apexcharts/dist/apexcharts.min.js"></script>
@@ -415,6 +535,127 @@
     <script src="./libs/dragula-master/dist/dragula.min.js"></script>
     <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
     <script src="/path/to/leaflet.js"></script>
+    <!--<script src="./js/wb_dragdrop.js"></script>-->
+    <script>
+        let lastDraggedElement, originalContainer, originalIndex, clickedItem;
+
+        // Function to sort items in Drop Zone 1
+        function sortItems() {
+            const container = document.getElementById('scrollable-zone');
+            const items = Array.from(container.children);
+
+            items.sort((a, b) => {
+                // Extract text content and compare alphabetically and numerically
+                const aText = a.textContent.trim();
+                const bText = b.textContent.trim();
+
+                const aNum = parseFloat(aText.replace(/[^0-9.]/g, ''));
+                const bNum = parseFloat(bText.replace(/[^0-9.]/g, ''));
+
+                // Compare based on numerical values if both are valid numbers
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return aNum - bNum;
+                }
+
+                // If not numeric, compare alphabetically
+                return aText.localeCompare(bText, undefined, { numeric: true });
+            });
+
+            items.forEach(node => container.appendChild(node)); // Re-append sorted items
+        }
+
+        // Initialize Dragula with only allowing dragging items from left container to tab panes
+        const drake = dragula([document.getElementById('scrollable-zone'), 
+                               document.getElementById('people'), 
+                               document.getElementById('location'), 
+                               document.getElementById('applications'), 
+                               document.getElementById('hardware'), 
+                               document.getElementById('suppliers'), 
+                               document.getElementById('data')], {
+            accepts: function (el, target, source, sibling) {
+                return source.id === 'scrollable-zone' && target.id !== 'scrollable-zone';
+            }
+        });
+
+        // Event listener for drag start to capture the original container and index
+        drake.on('drag', function (el, source) {
+            originalContainer = source;
+            originalIndex = Array.from(source.children).indexOf(el); // Capture the original index
+        });
+
+        // Event listener for drop event
+        drake.on('drop', function (el, target, source, sibling) {
+            lastDraggedElement = el;
+
+            // Show confirmation modal
+            if (target.id !== 'scrollable-zone') {
+                $('#dropModal').modal('show');
+            }
+        });
+
+        // Confirm button event listener for drop confirmation
+        $('#confirmBtn').on('click', function () {
+            $('#dropModal').modal('hide');
+            lastDraggedElement = null; // Clear the reference after confirming
+            originalContainer = null;
+            originalIndex = null;
+
+            // Sort items in Drop Zone 1 after confirmation
+            sortItems();
+        });
+
+        // Cancel button event listener for drop cancellation
+        $('#cancelBtn').on('click', function () {
+            // Move the element back to its original container and index position
+            if (lastDraggedElement && originalContainer) {
+                const items = Array.from(originalContainer.children);
+                const nextItem = items[originalIndex + 1]; // Find the item that comes after the original position
+                if (nextItem) {
+                    originalContainer.insertBefore(lastDraggedElement, nextItem);
+                } else {
+                    originalContainer.appendChild(lastDraggedElement);
+                }
+            }
+            $('#dropModal').modal('hide');
+
+            // Sort items in Drop Zone 1 after canceling
+            sortItems();
+        });
+
+        // Event listener for items in any tab-pane for removal
+        $(document).on('click', '.tab-pane .item', function () {
+            clickedItem = this; // Save the clicked item
+            $('#removeModal').modal('show'); // Show the remove confirmation modal
+        });
+
+        // Confirm button event listener for removing item back to Zone 1
+        $('#removeConfirmBtn').on('click', function () {
+            if (clickedItem) {
+                $('#scrollable-zone').append(clickedItem); // Move the item back to Zone 1
+                clickedItem = null; // Clear the saved item after moving
+
+                // Sort items in Drop Zone 1 after removal
+                sortItems();
+            }
+            $('#removeModal').modal('hide'); // Close the modal
+        });
+
+        // Cancel button event listener for remove cancellation
+        $('#removeCancelBtn').on('click', function () {
+            clickedItem = null; // Clear the saved item on cancel
+            $('#removeModal').modal('hide'); // Close the modal
+        });
+
+        // Search functionality for filtering items in Drop Zone 1
+        $('#searchBox').on('input', function () {
+            let searchText = $(this).val().toLowerCase();
+            $('#scrollable-zone .item').each(function () {
+                let itemText = $(this).text().toLowerCase();
+                $(this).toggle(itemText.indexOf(searchText) > -1);
+            });
+        });
+    </script>
+    
 </body>
 
 </html>

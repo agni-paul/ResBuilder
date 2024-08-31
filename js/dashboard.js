@@ -1,5 +1,10 @@
 function init() {
     dragula([document.querySelector("#dragparent1"), document.querySelector("#dragparent2")]);
+    //initPopup();
+}
+
+function initPopup(){
+    $('#myModal').modal('show');
 }
 
 $(function () {
@@ -106,7 +111,7 @@ $(function () {
 
   };
 
-  var chart = new ApexCharts(document.querySelector("#chart"), chart);
+  chart = new ApexCharts(document.querySelector("#chart"), chart);
   chart.render();
 
 
@@ -172,7 +177,7 @@ $(function () {
     },
   };
 
-  var chart = new ApexCharts(document.querySelector("#breakup"), breakup);
+  chart = new ApexCharts(document.querySelector("#breakup"), breakup);
   chart.render();
 
     // =====================================
@@ -237,7 +242,7 @@ $(function () {
         },
     };
 
-    var chart = new ApexCharts(document.querySelector("#breakup1"), breakup1);
+    chart = new ApexCharts(document.querySelector("#breakup1"), breakup1);
     chart.render();
 
     // =====================================
@@ -302,7 +307,7 @@ $(function () {
         },
     };
 
-    var chart = new ApexCharts(document.querySelector("#breakup2"), breakup2);
+    chart = new ApexCharts(document.querySelector("#breakup2"), breakup2);
     chart.render();
 
     // =====================================
@@ -367,7 +372,7 @@ $(function () {
         },
     };
 
-    var chart = new ApexCharts(document.querySelector("#breakup3"), breakup3);
+    chart = new ApexCharts(document.querySelector("#breakup3"), breakup3);
     chart.render();
 
 
@@ -418,4 +423,4 @@ $(function () {
     },
   };
   new ApexCharts(document.querySelector("#earning"), earning).render();
-})
+});
