@@ -62,7 +62,7 @@
             background: #f1f3f5;
             border-radius: 8px;
             padding: 15px;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.05s ease-in-out;
         }
 
         .tab-pane.show {
@@ -393,26 +393,39 @@
                             </div>
                         </div>
 
-                        <!-- Bootstrap Modal for Confirming Drop -->
-                        <div class="modal fade" id="dropModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <!-- Confirm Modal -->
+                        <div class="modal fade" id="dropModal" tabindex="-1" aria-labelledby="dropModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modalLabel">Confirm Drop</h5>
+                                        <h5 class="modal-title" id="dropModalLabel">Confirm Action</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Do you want to move this item to the selected tab?
+                                        <form id="modalForm">
+                                            <div class="mb-3">
+                                                <label for="wfhInput" class="form-label">How many WFH:</label>
+                                                <input type="number" class="form-control" id="wfhInput" min="0">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="officeInput" class="form-label">How many work at office:</label>
+                                                <input type="number" class="form-control" id="officeInput" min="0">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exclusiveInput" class="form-label">What % of people in this Role work on this service exclusively:</label>
+                                                <input type="number" class="form-control" id="exclusiveInput" min="0" max="100">
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary" id="confirmBtn">Yes</button>
+                                        <button type="button" class="btn btn-primary" id="confirmBtn">Confirm</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Bootstrap Modal for Removing Item -->
+                        <!-- Remove Modal -->
                         <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -421,105 +434,31 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        Do you want to remove this item and move it back to the first container?
+                                        <form id="removeModalForm">
+                                            <div class="mb-3">
+                                                <label for="removeWfhInput" class="form-label">How many WFH:</label>
+                                                <input type="number" class="form-control" id="removeWfhInput" min="0">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="removeOfficeInput" class="form-label">How many work at office:</label>
+                                                <input type="number" class="form-control" id="removeOfficeInput" min="0">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="removeExclusiveInput" class="form-label">What % of people in this Role work on this service exclusively:</label>
+                                                <input type="number" class="form-control" id="removeExclusiveInput" min="0" max="100">
+                                            </div>
+                                        </form>
+                                        <p>Do you want to remove this item?</p>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" id="removeCancelBtn" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" class="btn btn-primary" id="removeConfirmBtn">Yes</button>
+                                        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save</button>
+                                        <button type="button" class="btn btn-danger" id="removeConfirmBtn">Remove</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>                    
+                        </div>               
                 </div>
-                <div class="row">
-                    <!--<div class="col-sm-6 col-xl-3">
-                              <div class="card overflow-hidden rounded-2">
-                                  <div class="position-relative">
-                                      <a href="javascript:void(0)"><img src="./images/products/s4.jpg" class="card-img-top rounded-0" alt="..."></a>
-                                      <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
-                                  </div>
-                                  <div class="card-body pt-3 p-4">
-                                      <h6 class="fw-semibold fs-4">Boat Headphone</h6>
-                                      <div class="d-flex align-items-center justify-content-between">
-                                          <h6 class="fw-semibold fs-4 mb-0">$50 <span class="ms-2 fw-normal text-muted fs-3"><del>$65</del></span></h6>
-                                          <ul class="list-unstyled d-flex align-items-center mb-0">
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                          </ul>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-sm-6 col-xl-3">
-                              <div class="card overflow-hidden rounded-2">
-                                  <div class="position-relative">
-                                      <a href="javascript:void(0)"><img src="./images/products/s5.jpg" class="card-img-top rounded-0" alt="..."></a>
-                                      <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
-                                  </div>
-                                  <div class="card-body pt-3 p-4">
-                                      <h6 class="fw-semibold fs-4">MacBook Air Pro</h6>
-                                      <div class="d-flex align-items-center justify-content-between">
-                                          <h6 class="fw-semibold fs-4 mb-0">$650 <span class="ms-2 fw-normal text-muted fs-3"><del>$900</del></span></h6>
-                                          <ul class="list-unstyled d-flex align-items-center mb-0">
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                          </ul>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-sm-6 col-xl-3">
-                              <div class="card overflow-hidden rounded-2">
-                                  <div class="position-relative">
-                                      <a href="javascript:void(0)"><img src="./images/products/s7.jpg" class="card-img-top rounded-0" alt="..."></a>
-                                      <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
-                                  </div>
-                                  <div class="card-body pt-3 p-4">
-                                      <h6 class="fw-semibold fs-4">Red Valvet Dress</h6>
-                                      <div class="d-flex align-items-center justify-content-between">
-                                          <h6 class="fw-semibold fs-4 mb-0">$150 <span class="ms-2 fw-normal text-muted fs-3"><del>$200</del></span></h6>
-                                          <ul class="list-unstyled d-flex align-items-center mb-0">
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                              <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                          </ul>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-sm-6 col-xl-3">
-                        <div class="card overflow-hidden rounded-2">
-                            <div class="position-relative">
-                                <a href="javascript:void(0)"><img src="./images/products/s11.jpg" class="card-img-top rounded-0" alt="..."></a>
-                                <a href="javascript:void(0)" class="bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"><i class="ti ti-basket fs-4"></i></a>
-                            </div>
-                            <div class="card-body pt-3 p-4">
-                                <h6 class="fw-semibold fs-4">Cute Soft Teddybear</h6>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h6 class="fw-semibold fs-4 mb-0">$285 <span class="ms-2 fw-normal text-muted fs-3"><del>$345</del></span></h6>
-                                    <ul class="list-unstyled d-flex align-items-center mb-0">
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="me-1" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                        <li><a class="" href="javascript:void(0)"><i class="ti ti-star text-warning"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
-                </div>
-                <!--<div class="py-6 px-6 text-center">
-                  <p class="mb-0 fs-4">Design and Developed by <a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">AdminMart.com</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a></p>
-                </div>-->
             </div>
         </div>
     </div>
@@ -537,124 +476,153 @@
     <script src="/path/to/leaflet.js"></script>
     <!--<script src="./js/wb_dragdrop.js"></script>-->
     <script>
-        let lastDraggedElement, originalContainer, originalIndex, clickedItem;
+    let drake;
+    let originalContainer, originalIndex, originalText;
+    let lastDraggedElement = null;
+    let clickedItem = null;
+    const itemsData = new Map(); // Map to store original titles of items
 
-        // Function to sort items in Drop Zone 1
-        function sortItems() {
-            const container = document.getElementById('scrollable-zone');
-            const items = Array.from(container.children);
+    // Sorting function for Drop Zone 1
+    function sortItems() {
+        const items = Array.from(document.querySelectorAll('#scrollable-zone .item'));
+        items.sort((a, b) => a.textContent.trim().localeCompare(b.textContent.trim(), undefined, {numeric: true}));
+        items.forEach(item => document.getElementById('scrollable-zone').appendChild(item));
+    }
 
-            items.sort((a, b) => {
-                // Extract text content and compare alphabetically and numerically
-                const aText = a.textContent.trim();
-                const bText = b.textContent.trim();
-
-                const aNum = parseFloat(aText.replace(/[^0-9.]/g, ''));
-                const bNum = parseFloat(bText.replace(/[^0-9.]/g, ''));
-
-                // Compare based on numerical values if both are valid numbers
-                if (!isNaN(aNum) && !isNaN(bNum)) {
-                    return aNum - bNum;
-                }
-
-                // If not numeric, compare alphabetically
-                return aText.localeCompare(bText, undefined, { numeric: true });
-            });
-
-            items.forEach(node => container.appendChild(node)); // Re-append sorted items
-        }
-
-        // Initialize Dragula with only allowing dragging items from left container to tab panes
-        const drake = dragula([document.getElementById('scrollable-zone'), 
-                               document.getElementById('people'), 
-                               document.getElementById('location'), 
-                               document.getElementById('applications'), 
-                               document.getElementById('hardware'), 
-                               document.getElementById('suppliers'), 
-                               document.getElementById('data')], {
-            accepts: function (el, target, source, sibling) {
-                return source.id === 'scrollable-zone' && target.id !== 'scrollable-zone';
+    $(document).ready(function () {
+        // Dragula initialization
+        drake = dragula([
+            document.getElementById('scrollable-zone'),
+            document.getElementById('people'),
+            document.getElementById('location'),
+            document.getElementById('applications'),
+            document.getElementById('hardware'),
+            document.getElementById('suppliers'),
+            document.getElementById('data')
+        ], {
+            accepts: function (el, target, source) {
+                return target !== document.getElementById('scrollable-zone');
             }
         });
 
-        // Event listener for drag start to capture the original container and index
+        // Track original container and index
         drake.on('drag', function (el, source) {
             originalContainer = source;
-            originalIndex = Array.from(source.children).indexOf(el); // Capture the original index
+            originalIndex = Array.prototype.indexOf.call(source.children, el);
+            originalText = el.textContent.trim();
         });
 
-        // Event listener for drop event
-        drake.on('drop', function (el, target, source, sibling) {
-            lastDraggedElement = el;
+        // Drop event with modal confirmation
+        drake.on('drop', function (el, target, source) {
+            if (target && target !== source) {
+                lastDraggedElement = el;
 
-            // Show confirmation modal
-            if (target.id !== 'scrollable-zone') {
+                // Show confirmation modal
                 $('#dropModal').modal('show');
+
+                // Cancel button action
+                $('#cancelBtn').off('click').on('click', function () {
+                    if (originalContainer) {
+                        originalContainer.insertBefore(el, originalContainer.children[originalIndex]);
+                        el.textContent = originalText;
+                        sortItems(); // Sort items after returning to the original zone
+                    }
+                });
+
+                // Confirm button action
+                $('#confirmBtn').off('click').on('click', function () {
+                    const wfhValue = $('#wfhInput').val();
+                    const officeValue = $('#officeInput').val();
+                    const exclusiveValue = $('#exclusiveInput').val();
+
+                    // Check if any of the fields are empty
+                    if (wfhValue === '' || officeValue === '' || exclusiveValue === '') {
+                        alert('Please enter values in all fields.');
+                        return;
+                    }
+
+                    // Validate range of exclusiveInput (0-100)
+                    if (exclusiveValue < 0 || exclusiveValue > 100) {
+                        alert('Exclusive percentage must be between 0 and 100.');
+                        return;
+                    }
+
+                    // Store original text and update the item with additional info
+                    const updatedText = `${originalText} \n WFH: ${wfhValue} \n Office: ${officeValue} \n Exclusive: ${exclusiveValue}%`;
+                    itemsData.set(el, originalText); // Store the original title in the map
+                    el.textContent = updatedText;
+
+                    $('#dropModal').modal('hide');
+                    sortItems(); // Sort items after confirming the drop
+                });
             }
         });
 
-        // Confirm button event listener for drop confirmation
-        $('#confirmBtn').on('click', function () {
-            $('#dropModal').modal('hide');
-            lastDraggedElement = null; // Clear the reference after confirming
-            originalContainer = null;
-            originalIndex = null;
-
-            // Sort items in Drop Zone 1 after confirmation
-            sortItems();
-        });
-
-        // Cancel button event listener for drop cancellation
-        $('#cancelBtn').on('click', function () {
-            // Move the element back to its original container and index position
-            if (lastDraggedElement && originalContainer) {
-                const items = Array.from(originalContainer.children);
-                const nextItem = items[originalIndex + 1]; // Find the item that comes after the original position
-                if (nextItem) {
-                    originalContainer.insertBefore(lastDraggedElement, nextItem);
-                } else {
-                    originalContainer.appendChild(lastDraggedElement);
-                }
-            }
-            $('#dropModal').modal('hide');
-
-            // Sort items in Drop Zone 1 after canceling
-            sortItems();
-        });
-
-        // Event listener for items in any tab-pane for removal
+        // Event listener for clicks on items in tab panes
         $(document).on('click', '.tab-pane .item', function () {
-            clickedItem = this; // Save the clicked item
-            $('#removeModal').modal('show'); // Show the remove confirmation modal
-        });
+            clickedItem = $(this);
+            const currentText = clickedItem.text();
+            const matches = currentText.match(/WFH: (\d+)\s*Office: (\d+)\s*Exclusive: (\d+)%/);
 
-        // Confirm button event listener for removing item back to Zone 1
-        $('#removeConfirmBtn').on('click', function () {
-            if (clickedItem) {
-                $('#scrollable-zone').append(clickedItem); // Move the item back to Zone 1
-                clickedItem = null; // Clear the saved item after moving
-
-                // Sort items in Drop Zone 1 after removal
-                sortItems();
+            // Pre-fill the inputs with current values if matches are found
+            if (matches) {
+                $('#removeWfhInput').val(matches[1]);
+                $('#removeOfficeInput').val(matches[2]);
+                $('#removeExclusiveInput').val(matches[3]);
             }
-            $('#removeModal').modal('hide'); // Close the modal
+
+            $('#removeModal').modal('show');
         });
 
-        // Cancel button event listener for remove cancellation
-        $('#removeCancelBtn').on('click', function () {
-            clickedItem = null; // Clear the saved item on cancel
-            $('#removeModal').modal('hide'); // Close the modal
+        // Save changes button action
+        $('#saveChangesBtn').off('click').on('click', function () {
+            const wfhValue = $('#removeWfhInput').val();
+            const officeValue = $('#removeOfficeInput').val();
+            const exclusiveValue = $('#removeExclusiveInput').val();
+
+            // Check if any of the fields are empty
+            if (wfhValue === '' || officeValue === '' || exclusiveValue === '') {
+                alert('Please enter values in all fields.');
+                return;
+            }
+
+            // Validate range of exclusiveInput (0-100)
+            if (exclusiveValue < 0 || exclusiveValue > 100) {
+                alert('Exclusive percentage must be between 0 and 100.');
+                return;
+            }
+
+            // Update the clicked item's text with new values
+            const originalTitle = clickedItem.text().split('\n')[0].trim();
+            const updatedText = `${originalTitle} \n WFH: ${wfhValue} \n Office: ${officeValue} \n Exclusive: ${exclusiveValue}%`;
+            clickedItem.text(updatedText);
+            $('#removeModal').modal('hide');
         });
 
-        // Search functionality for filtering items in Drop Zone 1
-        $('#searchBox').on('input', function () {
-            let searchText = $(this).val().toLowerCase();
-            $('#scrollable-zone .item').each(function () {
-                let itemText = $(this).text().toLowerCase();
-                $(this).toggle(itemText.indexOf(searchText) > -1);
+        // Remove item when confirmed
+        $('#removeConfirmBtn').off('click').on('click', function () {
+            $('#removeModal').on('hidden.bs.modal', function () {
+                if (clickedItem) {
+                    $('#scrollable-zone').append(clickedItem); // Move back to Drop Zone 1
+                    if (itemsData.has(clickedItem[0])) {
+                        clickedItem.text(itemsData.get(clickedItem[0])); // Restore the original text
+                        itemsData.delete(clickedItem[0]); // Remove the entry from the map
+                    }
+                    sortItems(); // Sort items after removing and returning to Drop Zone 1
+                }
+            });
+            $('#removeModal').modal('hide');
+        });
+
+        // Search filter functionality
+        $('#searchBox').on('keyup', function () {
+            const value = $(this).val().toLowerCase();
+            $('#scrollable-zone .item').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
             });
         });
-    </script>
+    });
+</script>
     
 </body>
 
