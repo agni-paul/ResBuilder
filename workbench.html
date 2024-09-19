@@ -28,22 +28,65 @@
             margin: 10px;
         }
 
-        .scrollable-zone {
-            max-height: 300px; /* Adjust the height as needed */
-            overflow-y: auto;
-            padding-right: 10px; /* Prevents content from hiding behind the scrollbar */
+        /* Make the parent container flexible */
+        #left-container {
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            flex-grow: 1; /* Allow it to grow based on the content inside */
+            width: 100%; /* Make sure it takes the full width of its parent */
+            padding: 15px; /* Add padding for spacing */
+            margin: 10px; /* Add margin around the container */
+            background-color: #fff; /* Light background for readability */
+            border: 1px solid #ddd; /* Border for better visibility */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow for a polished look */
+            border-radius: 8px; /* Rounded corners for aesthetics */
+            overflow: hidden; /* Prevent content overflow */
         }
-        
+
+        /* Ensure the scrollable zone is flexible */
+        #scrollable-zone {
+            max-height: 300px; /* Limit the height to 300px and enable scrolling */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Prevent horizontal overflow and wrap content */
+            padding-right: 10px; /* Add space on the right */
+            width: 100%; /* Allow it to grow to fill the parent width */
+            padding: 10px; /* Add padding inside */
+            background-color: #f9f9f9; /* Light background for better readability */
+            border: 1px solid #ddd; /* Add a border around the zone */
+            word-wrap: break-word; /* Ensure text wraps within the available width */
+        }
+
+        /* Ensure items inside the scrollable zone are displayed properly */
+        #scrollable-zone .item {
+            padding: 10px; /* Add padding inside each item */
+            margin-bottom: 8px; /* Add space between items */
+            background-color: #DBE6F2; /* Light background */
+            color: #000; /* Dark text for contrast */
+            border-radius: 4px; /* Rounded corners for aesthetics */
+            text-align: left; /* Align text to the left */
+            display: block; /* Ensure each item takes up the full width */
+            width: 100%; /* Make sure items take up the full available width */
+            word-wrap: break-word; /* Ensure long words wrap to the next line */
+            overflow: hidden; /* Prevent content overflow */
+            white-space: normal; /* Make sure the text wraps properly */
+            line-height: 1.5; /* Improve readability */
+        }
+
         .item {
             padding: 12px;
-            margin: 6px 0;
+            margin: 8px 0;
             background-color: #DBE6F2;
             color: #000000;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            text-align: center;
+            text-align: left;
             font-size: 1rem;
+            white-space: normal;
+            word-wrap: break-word;
+            display: inline-block;
+            word-break: break-all;
+            line-height: 1.5;
         }
 
         .item:hover {
@@ -93,6 +136,25 @@
         .modal-footer button {
             border-radius: 4px;
         }
+
+        /* Flashing effect for invalid fields */
+        .is-invalid {
+            border-color: red !important;
+            animation: flashBorder 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes flashBorder {
+            0% { border-color: red; }
+            100% { border-color: transparent; }
+        }
+
+        .invalid-feedback {
+            color: red;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: block;
+        }
+
     </style>
 </head>
 
@@ -317,9 +379,7 @@
                                         <!-- Added "Please select" as the default option in the first dropdown -->
                                         <select id="firstDropdown" class="form-select mb-2">
                                             <option value="default">Please select</option> <!-- Default option -->
-                                            <option value="category1">Category 1</option>
-                                            <option value="category2">Category 2</option>
-                                            <option value="category3">Category 3</option>
+                                            <option value="bank">Bank of ResBuilder Ltd</option>
                                         </select>
                                     </div>
                                     <div>
@@ -350,26 +410,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-2 d-flex align-items-stretch">
+                    <div class="col-lg-4 d-flex align-items-stretch">
                         <div class="container card" id="left-container">
                             <!-- Search box for filtering items -->
                             <div class="mb-3">
                                 <input type="text" id="searchBox" class="form-control" placeholder="Search...">
                             </div>
                             <!-- Scrollable container for items -->
-                            <div class="scrollable-zone" id="scrollable-zone">
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 1A">Item 1</button> <!-- Hidden on page load -->
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 1B">Item 2</button> <!-- Hidden on page load -->
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 1C">Item A</button> <!-- Hidden on page load -->
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 2A">Item B</button> <!-- Hidden on page load -->
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 2B">Item 10</button> <!-- Hidden on page load -->
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 2C">Item 20</button> <!-- Hidden on page load -->
-                                <button class="item btn btn-light" style="display: none;" data-category="Option 3A">Item Z</button> <!-- Hidden on page load -->
+                            <div class="scrollable-zone border p-3" id="scrollable-zone">
+                                
                             </div>
                         </div>
                     </div>
                     <!-- Bootstrap Tabs for Zone 2 -->
-                        <div class="container card col-lg-8 align-items-stretch">
+                        <div class="container card col-lg-7 align-items-stretch">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="people-tab" data-bs-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</button>
@@ -391,12 +445,24 @@
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="people" role="tabpanel" aria-labelledby="people-tab"></div>
-                                <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab"></div>
-                                <div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="applications-tab"></div>
-                                <div class="tab-pane fade" id="hardware" role="tabpanel" aria-labelledby="hardware-tab"></div>
-                                <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab"></div>
-                                <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab"></div>
+                                <div class="tab-pane fade show active" id="people" role="tabpanel" aria-labelledby="people-tab">
+                                    <!-- This tab-pane is now a drop zone -->
+                                </div>
+                                <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
+                                    <!-- This tab-pane is now a drop zone -->
+                                </div>
+                                <div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="applications-tab">
+                                    <!-- This tab-pane is now a drop zone -->
+                                </div>
+                                <div class="tab-pane fade" id="hardware" role="tabpanel" aria-labelledby="hardware-tab">
+                                    <!-- This tab-pane is now a drop zone -->
+                                </div>
+                                <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="suppliers-tab">
+                                    <!-- This tab-pane is now a drop zone -->
+                                </div>
+                                <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                                    <!-- This tab-pane is now a drop zone -->
+                                </div>
                             </div>
                         </div>
 
@@ -483,80 +549,282 @@
     <script src="/path/to/leaflet.js"></script>
     <!--<script src="./js/wb_dragdrop.js"></script>-->
     <script>
-    let drake, originalContainer, originalIndex, originalText;
-    let lastDraggedElement = null;
-    let clickedItem = null;
-    const itemsData = new Map(); // Map to store original titles of items
+$(document).ready(function () {
+    // Define services for 'Bank of ResBuilder Ltd'
+    const bankServices = [
+        'Car Loan Service', 'Mortgage Loan Service', 'Commercial Loan Service', 'Corporate Loan Service',
+        'Business Loan Service', 'Domestic Payment Service Inbound', 'Domestic Payment Service Outbound',
+        'Debit Card Service', 'Credit Card Service', 'International Payment Service Inbound',
+        'International Payment Service Outbound', 'Treasury Service', 'Vault Service', 'Cash & Coin Handling Service',
+        'Clearing Service', 'Deposit Service', 'Cheques and Drafts Service'
+    ];
 
-    // Sorting function for Drop Zone 1
-    function sortItems() {
-        const items = Array.from(document.querySelectorAll('#scrollable-zone .item'));
-        items.sort((a, b) => a.textContent.trim().localeCompare(b.textContent.trim(), undefined, {numeric: true}));
-        items.forEach(item => document.getElementById('scrollable-zone').appendChild(item));
-    }
+    // Define the roles for People tab
+    const peopleRoles = [
+        'Applications Development Lead', 'Branch Team Manager', 'Business Analyst Lead', 'Business Manager to CEO',
+        'Call Centre Manager', 'Call Centre Team Lead', 'CEO Office Lead', 'Compliance Lead', 'Crisis BCM Manager',
+        'Data Governance Manager', 'Data Protection Lead', 'Dispute Resolution', 'Enterprise Architecture Manager',
+        'Facilities Manager', 'Financial Analytics Team Lead', 'Financial Control Lead', 'Forecasting Team Lead',
+        'GIA Lead', 'Head of AIS', 'Head of Compliance', 'Head of Dispute Resolution', 'Head of Financial Analytics',
+        'Head of Financial Control', 'Head of Financial Forecasting', 'Head of GIA', 'Head of HRM', 'Head of ITSCM',
+        'Head of Marketing', 'Head of Operational Risk Management', 'Head of Supplier Management', 'Head of Talent Acquisition',
+        'Head of Training & Development', 'HRM Lead', 'Info Sec Manager', 'Infrastructure Manager', 'Innovation Lead',
+        'Marketing Strategies Lead', 'Operational Resilience Co-ordinator', 'Operational Resilience Manager',
+        'Operational Risk Management Lead', 'Process Improvement Lead', 'Resilience Co-ordinator', 'Sales Director',
+        'Sales Manager', 'Service Desk Manager', 'Software Applications Manager', 'Software Projects Lead', 
+        'Supplier Management Lead', 'Talent Lead', 'Training Dev Lead'
+    ];
 
-    $(document).ready(function () {
-        // Initially hide all items in Drop Zone 1 (on page load)
-        $('#scrollable-zone .item').hide(); // Items in Drop Zone 1 are hidden by default
+    // Store lists of items for each dropdown selection
+    const savedItemLists = {};
 
-        // Populate the second dropdown based on the first dropdown selection
-        $('#firstDropdown').on('change', function() {
-            const selectedCategory = $(this).val();
-            let options;
+    // Handle Dropdown 1 change event
+    $('#firstDropdown').on('change', function() {
+        const selectedCategory = $(this).val();
 
-            // Hide items in Drop Zone 1 if "Please select" is chosen
-            if (selectedCategory === 'default') {
-                $('#scrollable-zone .item').hide(); // Hide all items
-                $('#secondDropdown').empty().append('<option value="default">Please select</option>'); // Reset second dropdown
-                return;
-            }
+        // Clear Dropdown 2 and Drop Zone 1 when "Please select" is chosen
+        if (selectedCategory === 'default') {
+            $('#secondDropdown').empty().append('<option value="default">Please select</option>'); // Reset Dropdown 2
+            $('#scrollable-zone').empty(); // Clear Drop Zone 1
+            return;
+        }
 
-            // Dynamically populate the second dropdown
-            if (selectedCategory === 'category1') {
-                options = ['Option 1A', 'Option 1B', 'Option 1C'];
-            } else if (selectedCategory === 'category2') {
-                options = ['Option 2A', 'Option 2B', 'Option 2C'];
-            } else if (selectedCategory === 'category3') {
-                options = ['Option 3A', 'Option 3B', 'Option 3C'];
-            }
+        // If "Bank of ResBuilder Ltd" is selected, populate Dropdown 2 with relevant services
+        if (selectedCategory === 'bank') {
+            $('#secondDropdown').empty().append('<option value="default">Please select</option>'); // Reset Dropdown 2 first
 
-            // Update the second dropdown with new options
-            $('#secondDropdown').empty().append('<option value="default">Please select</option>'); // Reset with "Please select"
-            options.forEach(option => {
-                $('#secondDropdown').append(`<option value="${option}">${option}</option>`);
+            // Populate Dropdown 2 with bank services
+            bankServices.forEach(service => {
+                $('#secondDropdown').append(`<option value="${service}">${service}</option>`);
             });
 
-            // Hide items when changing first dropdown until second dropdown is selected
-            $('#scrollable-zone .item').hide();
+            $('#scrollable-zone').empty(); // Clear Drop Zone 1 when Dropdown 2 is updated
+        }
+    });
+
+    // Handle Dropdown 2 change event
+    $('#secondDropdown').on('change', function () {
+        const selectedService = $(this).val();
+
+        // Clear Drop Zone 1 when "Please select" is chosen in Dropdown 2
+        if (selectedService === 'default') {
+            $('#scrollable-zone').empty(); // Clear Drop Zone 1
+            return;
+        }
+
+        // Save current items in Drop Zone 1 for this dropdown selection
+        const currentServiceItems = $('#scrollable-zone .item').map(function () {
+            return $(this).text();
+        }).get();
+        if ($('#secondDropdown').data('previousService') !== undefined) {
+            savedItemLists[$('#secondDropdown').data('previousService')] = currentServiceItems;
+        }
+
+        $('#secondDropdown').data('previousService', selectedService); // Track the current service
+
+        // If we have previously saved items for this service, restore them
+        const savedItems = savedItemLists[selectedService] || peopleRoles;
+        $('#scrollable-zone').empty();
+
+        savedItems.sort(); // Sort alphabetically before displaying
+
+        savedItems.forEach((role, index) => {
+            $('#scrollable-zone').append(`<div class="item" data-role="${role}" data-index="${index}" data-original="${role}">${role}</div>`);
         });
+    });
 
-        // When second dropdown is selected, update Drop Zone 1's items
-        $('#secondDropdown').on('change', function () {
-            const selectedOption = $(this).val();
+    // Initialize Dragula for each tab-pane as a drop zone
+    const tabDropZones = [
+        '#people',      // People tab drop zone
+        '#location',    // Location tab drop zone
+        '#applications',// Applications tab drop zone
+        '#hardware',    // Hardware tab drop zone
+        '#suppliers',   // Suppliers tab drop zone
+        '#data'         // Data tab drop zone
+    ];
 
-            // Hide items if "Please select" is chosen
-            if (selectedOption === 'default') {
-                $('#scrollable-zone .item').hide();
-                return;
-            }
+    const drake = dragula([document.getElementById('scrollable-zone')].concat(
+        tabDropZones.map(id => document.querySelector(id))
+    ));
 
-            // Show items when a valid option is selected in the second dropdown
-            const items = Array.from(document.querySelectorAll('#scrollable-zone .item'));
-            items.forEach(item => {
-                // Only show items that match the selected category/option
-                if ($(item).data('category') === selectedOption) {
-                    $(item).show();
+    // Handle item drag event and trigger the confirm modal
+    drake.on('drop', function (el, target, source) {
+        if (target && target.id !== 'scrollable-zone') {
+            // Open the confirm modal on drop
+            const text = $(el).text();
+            const values = extractValues(text);  // Custom function to extract values
+
+            $('#wfhInput').val(values.wfh || '');
+            $('#officeInput').val(values.office || '');
+            $('#exclusiveInput').val(values.exclusive || '');
+
+            $('#dropModal').modal('show');
+
+            // Save the state to localStorage after the item is dropped
+            saveState();
+
+            // Confirm button action with validation
+            $('#confirmBtn').off('click').on('click', function () {
+                let valid = true;
+                const wfh = $('#wfhInput').val();
+                const office = $('#officeInput').val();
+                const exclusive = $('#exclusiveInput').val();
+
+                // Remove previous error classes and messages
+                $('.form-control').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+
+                // Check each field for validity
+                if (wfh === '' || wfh < 0) {
+                    $('#wfhInput').addClass('is-invalid');
+                    $('#wfhInput').after('<div class="invalid-feedback">Invalid entry</div>');
+                    valid = false;
+                }
+                if (office === '' || office < 0) {
+                    $('#officeInput').addClass('is-invalid');
+                    $('#officeInput').after('<div class="invalid-feedback">Invalid entry</div>');
+                    valid = false;
+                }
+                if (exclusive === '' || exclusive < 0 || exclusive > 100) {
+                    $('#exclusiveInput').addClass('is-invalid');
+                    $('#exclusiveInput').after('<div class="invalid-feedback">Invalid entry</div>');
+                    valid = false;
+                }
+
+                if (valid) {
+                    // If all fields are valid, process the form
+                    $('#dropModal').modal('hide'); // Hide the modal
+                    $(el).html(`${$(el).data('original')}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
+                    $(el).appendTo($(target)); // Move item to the target zone
+
+                    // Save the updated state
+                    saveState();
                 } else {
-                    $(item).hide();
+                    // Highlight the errors and show feedback messages
+                    $('.is-invalid').each(function() {
+                        $(this).focus(); // Focus on the first invalid field
+                    });
                 }
             });
+
+            // Cancel button action
+            $('#cancelBtn').off('click').on('click', function () {
+                $(el).appendTo($('#scrollable-zone')); // Revert item to Drop Zone 1
+                $('#dropModal').modal('hide');
+            });
+        } else if (source && target.id === 'scrollable-zone') {
+            // When item is moved back to Drop Zone 1, reset it to its original state and place it in the correct order
+            $(el).html($(el).data('original'));
+            restoreOriginalPosition($(el), $('#scrollable-zone'));
+        }
+    });
+
+    // Real-time search functionality for Drop Zone 1
+    $('#searchBox').on('keyup', function () {
+        const searchTerm = $(this).val().toLowerCase();
+        $('#scrollable-zone .item').each(function () {
+            const text = $(this).text().toLowerCase();
+            if (text.includes(searchTerm)) {
+                $(this).show(); // Show matching item
+            } else {
+                $(this).hide(); // Hide non-matching item
+            }
+        });
+    });
+
+    // Trigger remove modal when clicking an item in Drop Zone 2
+    $('.tab-pane').on('click', '.item', function () {
+        const item = $(this); // The clicked item
+        const values = extractValues(item.html());  // Extract values from item text
+
+        // Set the input fields in the remove modal with the existing values
+        $('#removeWfhInput').val(values.wfh || '');
+        $('#removeOfficeInput').val(values.office || '');
+        $('#removeExclusiveInput').val(values.exclusive || '');
+
+        $('#removeModal').modal('show'); // Show the remove modal
+
+        // Confirm button action for saving an item (Save Changes)
+        $('#saveChangesBtn').off('click').on('click', function () {
+            const wfh = $('#removeWfhInput').val();
+            const office = $('#removeOfficeInput').val();
+            const exclusive = $('#removeExclusiveInput').val();
+
+            // Update the item in Drop Zone 2 with the modified values
+            $(item).html(`${$(item).data('original')}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
+
+            // Save the state after updating the item
+            saveState();
+
+            $('#removeModal').modal('hide'); // Hide the remove modal
         });
 
-        // Dragula initialization and other event listeners
-        // (Code remains the same)
+        // Remove item and return to Drop Zone 1
+        $('#removeConfirmBtn').off('click').on('click', function () {
+            $(item).html($(item).data('original')).appendTo($('#scrollable-zone')); // Move back to Drop Zone 1
+            restoreOriginalPosition($(item), $('#scrollable-zone')); // Restore to original position
+            saveState();
+            $('#removeModal').modal('hide'); // Hide the modal
+        });
+
+        // Cancel button action
+        $('#removeCancelBtn').off('click').on('click', function () {
+            $('#removeModal').modal('hide'); // Just hide the modal on cancel
+        });
     });
+
+    // Function to extract WFH, Office, and Exclusive values from an item's text
+    function extractValues(text) {
+        const wfhMatch = text.match(/WFH = (\d+)/);
+        const officeMatch = text.match(/WAO = (\d+)/);
+        const exclusiveMatch = text.match(/Exclusive % = (\d+)%/);
+
+        return {
+            wfh: wfhMatch ? wfhMatch[1] : '',
+            office: officeMatch ? officeMatch[1] : '',
+            exclusive: exclusiveMatch ? exclusiveMatch[1] : ''
+        };
+    }
+
+    // Function to save the state of the items in Drop Zone 2
+    function saveState() {
+        const dropZone2Items = [];
+
+        // Collect items in Drop Zone 2 (tab zones)
+        $('.tab-pane .item').each(function () {
+            dropZone2Items.push({
+                content: $(this).html(),
+                zoneId: $(this).closest('.tab-pane').attr('id')  // Save the drop zone ID
+            });
+        });
+
+        // Save to localStorage
+        localStorage.setItem('dropZone2Items', JSON.stringify(dropZone2Items));
+    }
+
+    // Function to restore the state of the items
+    function restoreState() {
+        const dropZone2Items = JSON.parse(localStorage.getItem('dropZone2Items')) || [];
+
+        // Restore items in Drop Zone 2 (tab zones)
+        dropZone2Items.forEach(item => {
+            $(`#${item.zoneId}`).append(`<div class="item">${item.content}</div>`);
+        });
+    }
+
+    // Function to restore the original position of an item in Drop Zone 1
+    function restoreOriginalPosition(item, container) {
+        const items = container.children('.item').sort(function(a, b) {
+            return $(a).data('index') - $(b).data('index');
+        });
+        container.html(items); // Reorder all items
+    }
+
+    // Restore the saved state for Drop Zone 2 when the page loads
+    restoreState();
+});
 </script>
-    
+
 </body>
 
 </html>
