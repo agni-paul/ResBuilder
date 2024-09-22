@@ -548,7 +548,7 @@
     <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
     <script src="/path/to/leaflet.js"></script>
     <!--<script src="./js/wb_dragdrop.js"></script>-->
-    <script>
+<script>
 $(document).ready(function () {
     // Define services for 'Bank of ResBuilder Ltd'
     const bankServices = [
@@ -559,7 +559,7 @@ $(document).ready(function () {
         'Clearing Service', 'Deposit Service', 'Cheques and Drafts Service'
     ];
 
-    // Define the roles for People tab
+    // Define the roles for People tab (used for Drop Zone 1)
     const peopleRoles = [
         'Applications Development Lead', 'Branch Team Manager', 'Business Analyst Lead', 'Business Manager to CEO',
         'Call Centre Manager', 'Call Centre Team Lead', 'CEO Office Lead', 'Compliance Lead', 'Crisis BCM Manager',
@@ -571,15 +571,72 @@ $(document).ready(function () {
         'Head of Training & Development', 'HRM Lead', 'Info Sec Manager', 'Infrastructure Manager', 'Innovation Lead',
         'Marketing Strategies Lead', 'Operational Resilience Co-ordinator', 'Operational Resilience Manager',
         'Operational Risk Management Lead', 'Process Improvement Lead', 'Resilience Co-ordinator', 'Sales Director',
-        'Sales Manager', 'Service Desk Manager', 'Software Applications Manager', 'Software Projects Lead', 
+        'Sales Manager', 'Service Desk Manager', 'Software Applications Manager', 'Software Projects Lead',
         'Supplier Management Lead', 'Talent Lead', 'Training Dev Lead'
     ];
 
-    // Store lists of items for each dropdown selection
-    const savedItemLists = {};
+    const allRoles = [...peopleRoles]; // Copy the full list of people roles for reference
+
+    // Function to save the state for the selected service
+    function saveServiceState(service) {
+        const dropZone1Items = $('#scrollable-zone .item').map(function () {
+            return $(this).text();
+        }).get();
+
+        const dropZone2Items = [];
+        // Save items from all tab-pane zones
+        $('.tab-pane').each(function () {
+            const zoneId = $(this).attr('id');
+            const items = $(this).find('.item').map(function () {
+                return $(this).html();
+            }).get();
+            dropZone2Items.push({
+                zoneId,
+                items
+            });
+        });
+
+        // Store the state in localStorage
+        localStorage.setItem(service, JSON.stringify({
+            dropZone1: dropZone1Items,
+            dropZone2: dropZone2Items
+        }));
+    }
+
+    // Function to restore the state for the selected service
+    function restoreServiceState(service) {
+        const savedState = JSON.parse(localStorage.getItem(service)) || null;
+
+        // Clear both Drop Zone 1 and all tab-pane zones (Drop Zone 2)
+        $('#scrollable-zone').empty();
+        $('.tab-pane').empty();
+
+        if (savedState) {
+            // Restore Drop Zone 1
+            const dropZone2ItemsText = savedState.dropZone2.flatMap(zone => zone.items.map(item => item.split('<br>')[0])); // Extract only item names
+            const remainingItems = allRoles.filter(role => !dropZone2ItemsText.includes(role));
+
+            remainingItems.forEach(item => {
+                $('#scrollable-zone').append(`<div class="item" data-original="${item}">${item}</div>`);
+            });
+
+            // Restore Drop Zone 2 items across all tab-pane zones
+            savedState.dropZone2.forEach(zone => {
+                zone.items.forEach(itemContent => {
+                    $(`#${zone.zoneId}`).append(`<div class="item" data-original="${itemContent.split('<br>')[0]}">${itemContent}</div>`);
+                });
+                sortDropZone2(zone.zoneId); // Sort Drop Zone 2 after restoring items
+            });
+        } else {
+            // If no saved state, load all items into Drop Zone 1
+            allRoles.forEach(role => {
+                $('#scrollable-zone').append(`<div class="item" data-original="${role}">${role}</div>`);
+            });
+        }
+    }
 
     // Handle Dropdown 1 change event
-    $('#firstDropdown').on('change', function() {
+    $('#firstDropdown').on('change', function () {
         const selectedCategory = $(this).val();
 
         // Clear Dropdown 2 and Drop Zone 1 when "Please select" is chosen
@@ -606,41 +663,33 @@ $(document).ready(function () {
     $('#secondDropdown').on('change', function () {
         const selectedService = $(this).val();
 
-        // Clear Drop Zone 1 when "Please select" is chosen in Dropdown 2
+        // Clear Drop Zone 1 and tab panes when "Please select" is chosen
         if (selectedService === 'default') {
             $('#scrollable-zone').empty(); // Clear Drop Zone 1
+            $('.tab-pane').empty(); // Clear Drop Zone 2
             return;
         }
 
-        // Save current items in Drop Zone 1 for this dropdown selection
-        const currentServiceItems = $('#scrollable-zone .item').map(function () {
-            return $(this).text();
-        }).get();
+        // Save the current state for the previously selected service
         if ($('#secondDropdown').data('previousService') !== undefined) {
-            savedItemLists[$('#secondDropdown').data('previousService')] = currentServiceItems;
+            saveServiceState($('#secondDropdown').data('previousService'));
         }
 
-        $('#secondDropdown').data('previousService', selectedService); // Track the current service
+        // Track the current service
+        $('#secondDropdown').data('previousService', selectedService);
 
-        // If we have previously saved items for this service, restore them
-        const savedItems = savedItemLists[selectedService] || peopleRoles;
-        $('#scrollable-zone').empty();
-
-        savedItems.sort(); // Sort alphabetically before displaying
-
-        savedItems.forEach((role, index) => {
-            $('#scrollable-zone').append(`<div class="item" data-role="${role}" data-index="${index}" data-original="${role}">${role}</div>`);
-        });
+        // Restore the saved state for the selected service
+        restoreServiceState(selectedService);
     });
 
     // Initialize Dragula for each tab-pane as a drop zone
     const tabDropZones = [
-        '#people',      // People tab drop zone
-        '#location',    // Location tab drop zone
-        '#applications',// Applications tab drop zone
-        '#hardware',    // Hardware tab drop zone
-        '#suppliers',   // Suppliers tab drop zone
-        '#data'         // Data tab drop zone
+        '#people', // People tab drop zone
+        '#location', // Location tab drop zone
+        '#applications', // Applications tab drop zone
+        '#hardware', // Hardware tab drop zone
+        '#suppliers', // Suppliers tab drop zone
+        '#data' // Data tab drop zone
     ];
 
     const drake = dragula([document.getElementById('scrollable-zone')].concat(
@@ -650,18 +699,19 @@ $(document).ready(function () {
     // Handle item drag event and trigger the confirm modal
     drake.on('drop', function (el, target, source) {
         if (target && target.id !== 'scrollable-zone') {
-            // Open the confirm modal on drop
-            const text = $(el).text();
-            const values = extractValues(text);  // Custom function to extract values
+            // Set the original text if not already set
+            if (!$(el).data('original')) {
+                $(el).data('original', $(el).text());
+            }
+
+            const originalText = $(el).data('original');
+            const values = extractValues($(el).html()); // Extract existing values if any
 
             $('#wfhInput').val(values.wfh || '');
             $('#officeInput').val(values.office || '');
             $('#exclusiveInput').val(values.exclusive || '');
 
             $('#dropModal').modal('show');
-
-            // Save the state to localStorage after the item is dropped
-            saveState();
 
             // Confirm button action with validation
             $('#confirmBtn').off('click').on('click', function () {
@@ -694,14 +744,15 @@ $(document).ready(function () {
                 if (valid) {
                     // If all fields are valid, process the form
                     $('#dropModal').modal('hide'); // Hide the modal
-                    $(el).html(`${$(el).data('original')}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
+                    $(el).html(`${originalText}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
                     $(el).appendTo($(target)); // Move item to the target zone
+                    sortDropZone2(target.id); // Sort Drop Zone 2 after moving the item
 
                     // Save the updated state
-                    saveState();
+                    saveServiceState($('#secondDropdown').val());
                 } else {
                     // Highlight the errors and show feedback messages
-                    $('.is-invalid').each(function() {
+                    $('.is-invalid').each(function () {
                         $(this).focus(); // Focus on the first invalid field
                     });
                 }
@@ -713,9 +764,11 @@ $(document).ready(function () {
                 $('#dropModal').modal('hide');
             });
         } else if (source && target.id === 'scrollable-zone') {
-            // When item is moved back to Drop Zone 1, reset it to its original state and place it in the correct order
-            $(el).html($(el).data('original'));
+            // When item is moved back to Drop Zone 1, reset it to its original state
+            $(el).html($(el).data('original')); // Restore original text
             restoreOriginalPosition($(el), $('#scrollable-zone'));
+            sortDropZone1(); // Sort the items in Drop Zone 1 in ascending order
+            saveServiceState($('#secondDropdown').val()); // Ensure state is saved when moving back to Drop Zone 1
         }
     });
 
@@ -735,7 +788,7 @@ $(document).ready(function () {
     // Trigger remove modal when clicking an item in Drop Zone 2
     $('.tab-pane').on('click', '.item', function () {
         const item = $(this); // The clicked item
-        const values = extractValues(item.html());  // Extract values from item text
+        const values = extractValues(item.html()); // Extract values from item text
 
         // Set the input fields in the remove modal with the existing values
         $('#removeWfhInput').val(values.wfh || '');
@@ -751,10 +804,11 @@ $(document).ready(function () {
             const exclusive = $('#removeExclusiveInput').val();
 
             // Update the item in Drop Zone 2 with the modified values
-            $(item).html(`${$(item).data('original')}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
+            const originalText = $(item).data('original'); // Ensure the original text is used
+            $(item).html(`${originalText}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
 
             // Save the state after updating the item
-            saveState();
+            saveServiceState($('#secondDropdown').val());
 
             $('#removeModal').modal('hide'); // Hide the remove modal
         });
@@ -763,7 +817,8 @@ $(document).ready(function () {
         $('#removeConfirmBtn').off('click').on('click', function () {
             $(item).html($(item).data('original')).appendTo($('#scrollable-zone')); // Move back to Drop Zone 1
             restoreOriginalPosition($(item), $('#scrollable-zone')); // Restore to original position
-            saveState();
+            sortDropZone1(); // Sort items in Drop Zone 1
+            saveServiceState($('#secondDropdown').val());
             $('#removeModal').modal('hide'); // Hide the modal
         });
 
@@ -786,42 +841,47 @@ $(document).ready(function () {
         };
     }
 
-    // Function to save the state of the items in Drop Zone 2
-    function saveState() {
-        const dropZone2Items = [];
-
-        // Collect items in Drop Zone 2 (tab zones)
-        $('.tab-pane .item').each(function () {
-            dropZone2Items.push({
-                content: $(this).html(),
-                zoneId: $(this).closest('.tab-pane').attr('id')  // Save the drop zone ID
-            });
-        });
-
-        // Save to localStorage
-        localStorage.setItem('dropZone2Items', JSON.stringify(dropZone2Items));
-    }
-
-    // Function to restore the state of the items
-    function restoreState() {
-        const dropZone2Items = JSON.parse(localStorage.getItem('dropZone2Items')) || [];
-
-        // Restore items in Drop Zone 2 (tab zones)
-        dropZone2Items.forEach(item => {
-            $(`#${item.zoneId}`).append(`<div class="item">${item.content}</div>`);
-        });
-    }
-
     // Function to restore the original position of an item in Drop Zone 1
     function restoreOriginalPosition(item, container) {
-        const items = container.children('.item').sort(function(a, b) {
+        const items = container.children('.item').sort(function (a, b) {
             return $(a).data('index') - $(b).data('index');
         });
         container.html(items); // Reorder all items
     }
 
-    // Restore the saved state for Drop Zone 2 when the page loads
-    restoreState();
+    // Function to sort Drop Zone 1 items in ascending order by their text
+    function sortDropZone1() {
+        const items = $('#scrollable-zone .item').get();
+        items.sort((a, b) => {
+            return $(a).text().localeCompare($(b).text());
+        });
+        $('#scrollable-zone').empty().append(items); // Re-add sorted items
+    }
+
+    // Function to sort Drop Zone 2 items in ascending order by their text
+    function sortDropZone2(zoneId) {
+        const items = $(`#${zoneId} .item`).get();
+        items.sort((a, b) => {
+            return $(a).text().localeCompare($(b).text());
+        });
+        $(`#${zoneId}`).empty().append(items); // Re-add sorted items
+    }
+
+    // Save state on page unload
+    $(window).on('beforeunload', function () {
+        const currentService = $('#secondDropdown').val();
+        if (currentService !== 'default') {
+            saveServiceState(currentService);
+        }
+    });
+
+    // Restore the saved state when the page loads
+    $(document).ready(function () {
+        const selectedService = $('#secondDropdown').val();
+        if (selectedService !== 'default') {
+            restoreServiceState(selectedService);
+        }
+    });
 });
 </script>
 
