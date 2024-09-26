@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ResBuilder</title>
+    <link rel="shortcut icon" type="image/png" href="./images/logos/favicon.png" />
+    <link rel="stylesheet" href="./css/styles.min.css" />
+    <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.css" />
+    <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.min.css" />
+    <!--<link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />-->
+    <!--<link rel="stylesheet" href="/path/to/leaflet.css" />-->
+    <style>
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: #343a40;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+        }
+
+        #scrollable-zone {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+            width: 100%;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+
+        /* Align table headers and sorting arrows on the same line */
+        table th {
+            vertical-align: top; /* Aligns text and arrows to the top */
+            text-align: left; /* Aligns text to the left */
+            word-wrap: break-word; /* Allows text to break to the next line if necessary */
+            white-space: nowrap; /* Prevents the sorting arrows from wrapping to a new line */
+            padding: 10px; /* Adds padding for consistent spacing */
+        }
+
+        .sort-arrows {
+            margin-left: 5px; /* Adds a small space between text and arrows */
+            font-size: 0.8em; /* Adjusts size of the arrows */
+        }
+        
+        /* Style for progress bar percentage overlay */
+        .progress {
+            position: relative;
+            height: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .progress-bar {
+            height: 100%; /* Full height of the progress container */
+            transition: width 0.4s ease; /* Smooth transition for the progress */
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            top: 0;
+            left: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Custom popover styling */
+        .popover {
+            max-width: 300px; /* Adjust the width of the popover */
+        }
+
+        .popover-header {
+            font-weight: bold;
+            background-color: #f5f5f5;
+        }
+
+        .popover-body {
+            padding: 10px;
+        }
+
+        .popover-category {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+
+<body onload="init()">
+        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+         data-sidebar-position="fixed" data-header-position="fixed">
+        <aside class="left-sidebar">
+            <div>
+                <div class="brand-logo d-flex align-items-center justify-content-between">
+                    <a href="./index.html" class="text-nowrap logo-img">
+                        <img src="./images/logos/resbuilder_icon.png" width="180" alt="" />
+                    </a>
+                    <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                        <i class="ti ti-x fs-8"></i>
+                    </div>
+                </div>
+                <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+                    <ul id="sidebarnav">
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Home</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./index.html" aria-expanded="true">
+                                <span>
+                                    <i class="ti ti-chart-infographic"></i>
+                                </span>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./workbench.html" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-article"></i>
+                                </span>
+                                <span class="hide-menu">Workbench</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-message-circle"></i>
+                                </span>
+                                <span class="hide-menu">Chat</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-file-description"></i>
+                                </span>
+                                <span class="hide-menu">Support</span>
+                            </a>
+                        </li>
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">AUTH</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-login"></i>
+                                </span>
+                                <span class="hide-menu">Log out</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <div class="body-wrapper">
+            <header class="app-header">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-block d-xl-none">
+                            <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                                <i class="ti ti-menu-2"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+                                <i class="ti ti-bell-ringing"></i>
+                                <div class="notification bg-primary rounded-circle"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+                        <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <img src="./images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
+                                    <div class="message-body">
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-user fs-6"></i>
+                                            <p class="mb-0 fs-3">My Profile</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-mail fs-6"></i>
+                                            <p class="mb-0 fs-3">My Account</p>
+                                        </a>
+                                        <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                                            <i class="ti ti-list-check fs-6"></i>
+                                            <p class="mb-0 fs-3">My Task</p>
+                                        </a>
+                                        <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-11 d-flex align-items-stretch">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                                    <div class="mb-3 mb-sm-0">
+                                        <h6 class="card-title fw-semibold">Select Department</h6>
+                                        <span class="fw-normal">Select and edit Entity and Service</span>
+                                    </div>
+                                    <div>
+                                        <!-- Updated firstDropdown options -->
+                                        <select id="firstDropdown" class="form-select mb-2">
+                                            <option value="default">Please select</option>
+                                            <option value="all">All Departments</option>
+                                            <option value="group_operations">Bank of ResBuilder Group Operations</option>
+                                            <option value="resbuilder_bank">Bank of ResBuilder Ltd</option>
+                                            <option value="fund_management">ResBuilder Fund Management Ltd</option>
+                                            <option value="ventures">ResBuilder Ventures Ltd</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="text" id="searchBox" class="form-control" placeholder="Search...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-11 d-flex align-items-stretch">
+                        <div class="container card" id="left-container">
+                            <div class="scrollable-zone border p-3" id="scrollable-zone">
+                                <table class="table table-striped table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Service Name <span class="sort-arrows">▲▼</span></th>
+                                            <th>Description <span class="sort-arrows">▲▼</span></th>
+                                            <th>Department <span class="sort-arrows">▲▼</span></th>
+                                            <th>Business Manager <span class="sort-arrows">▲▼</span></th>
+                                            <th>Res Coordinator <span class="sort-arrows">▲▼</span></th>
+                                            <th>Dependency Mapping Progress <span class="sort-arrows">▲▼</span></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Service 1</td>
+                                            <td>Description 1</td>
+                                            <td>Department 1</td>
+                                            <td>Manager 1</td>
+                                            <td>Coordinator 1</td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 85%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                    <span class="progress-text">85%</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-gear"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-info">
+                                                    <i class="bi bi-info-circle"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Service 2</td>
+                                            <td>Description 2</td>
+                                            <td>Department 2</td>
+                                            <td>Manager 2</td>
+                                            <td>Coordinator 2</td>
+                                            <td>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                    <span class="progress-text">75%</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-gear"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-info">
+                                                    <i class="bi bi-info-circle"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./libs/jquery/dist/jquery.min.js"></script>
+    <script src="./libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/sidebarmenu.js"></script>
+    <script src="./js/app.min.js"></script>
+    <script src="./libs/apexcharts/dist/apexcharts.min.js"></script>
+    <script src="./libs/apexcharts/dist/apexcharts.esm.js"></script>
+    <script src="./libs/simplebar/dist/simplebar.js"></script>
+    <script src="./js/dashboard.js"></script>
+    <script src="./libs/dragula-master/dist/dragula.js"></script>
+    <script src="./libs/dragula-master/dist/dragula.min.js"></script>
+    <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
+    <!--<script src="/path/to/leaflet.js"></script>-->
+    <!--<script src="./js/wb_dragdrop.js"></script>-->
+<script>
+    $(document).ready(function () {
+        // Sorting functionality for table
+        $('th').on('click', function () {
+            var table = $(this).parents('table').eq(0);
+            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+            this.asc = !this.asc;
+            if (!this.asc) {
+                rows = rows.reverse();
+            }
+            for (var i = 0; i < rows.length; i++) {
+                table.append(rows[i]);
+            }
+        });
+
+        function comparer(index) {
+            return function (a, b) {
+                var valA = getCellValue(a, index), valB = getCellValue(b, index);
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+            };
+        }
+
+        function getCellValue(row, index) {
+            return $(row).children('td').eq(index).text();
+        }
+
+        // Real-time search functionality for the first column (Service Name)
+        $('#searchBox').on('keyup', function () {
+            var searchTerm = $(this).val().toLowerCase(); // Get the search term
+            $('#scrollable-zone tbody tr').each(function () {
+                var serviceName = $(this).find('td').eq(0).text().toLowerCase(); // Get the first column's value
+                if (serviceName.indexOf(searchTerm) !== -1) {
+                    $(this).show(); // Show row if match
+                } else {
+                    $(this).hide(); // Hide row if no match
+                }
+            });
+        });
+
+        // Data for different departments
+        const departmentData = {
+            all: [
+                { serviceName: 'Service 1', description: 'Description 1', department: 'All Departments', manager: 'Manager 1', coordinator: 'Coordinator 1', progress: 50 },
+                { serviceName: 'Service 2', description: 'Description 2', department: 'All Departments', manager: 'Manager 2', coordinator: 'Coordinator 2', progress: 70 }
+            ],
+            group_operations: [
+                { serviceName: 'Group Service 1', description: 'Group Description 1', department: 'Group Operations', manager: 'Group Manager 1', coordinator: 'Group Coordinator 1', progress: 85 },
+                { serviceName: 'Group Service 2', description: 'Group Description 2', department: 'Group Operations', manager: 'Group Manager 2', coordinator: 'Group Coordinator 2', progress: 60 }
+            ],
+            resbuilder_bank: [
+                { serviceName: 'Bank Service 1', description: 'Bank Description 1', department: 'Bank Operations', manager: 'Bank Manager 1', coordinator: 'Bank Coordinator 1', progress: 95 },
+                { serviceName: 'Bank Service 2', description: 'Bank Description 2', department: 'Bank Operations', manager: 'Bank Manager 2', coordinator: 'Bank Coordinator 2', progress: 40 }
+            ],
+            fund_management: [
+                { serviceName: 'Fund Service 1', description: 'Fund Description 1', department: 'Fund Management', manager: 'Fund Manager 1', coordinator: 'Fund Coordinator 1', progress: 30 },
+                { serviceName: 'Fund Service 2', description: 'Fund Description 2', department: 'Fund Management', manager: 'Fund Manager 2', coordinator: 'Fund Coordinator 2', progress: 80 }
+            ],
+            ventures: [
+                { serviceName: 'Ventures Service 1', description: 'Ventures Description 1', department: 'Ventures', manager: 'Ventures Manager 1', coordinator: 'Ventures Coordinator 1', progress: 65 },
+                { serviceName: 'Ventures Service 2', description: 'Ventures Description 2', department: 'Ventures', manager: 'Ventures Manager 2', coordinator: 'Ventures Coordinator 2', progress: 20 }
+            ]
+        };
+
+        // Function to dynamically update the table rows
+        // Function to dynamically update the table rows with color gradient
+        function updateTable(data) {
+            const tbody = $('#scrollable-zone tbody');
+            tbody.empty(); // Clear the table first
+            data.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.serviceName}</td>
+                        <td>${item.description}</td>
+                        <td>${item.department}</td>
+                        <td>${item.manager}</td>
+                        <td>${item.coordinator}</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: ${item.progress}%; background-color: ${getProgressColor(item.progress)};" aria-valuenow="${item.progress}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <span class="progress-text">${item.progress}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary"><i class="bi bi-gear"></i></button>
+                            <button class="btn btn-sm btn-info"><i class="bi bi-info-circle"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tbody.append(row);
+            });
+        }
+
+        // Function to determine the progress bar color based on completion percentage
+        function getProgressColor(progress) {
+            if (progress <= 25) {
+                return '#ff4d4d'; // Red
+            } else if (progress <= 50) {
+                return '#ffcc00'; // Yellow
+            } else if (progress <= 75) {
+                return '#66ccff'; // Light Blue
+            } else {
+                return '#33cc33'; // Green
+            }
+        }
+
+        // Ensure the table is empty on page load
+        $('#scrollable-zone tbody').empty();
+
+        // Handle dropdown change event
+        $('#firstDropdown').on('change', function () {
+            const selectedValue = $(this).val();
+            if (selectedValue === 'default') {
+                $('#scrollable-zone tbody').empty(); // Clear the table if "Please select" is selected
+            } else if (departmentData[selectedValue]) {
+                updateTable(departmentData[selectedValue]); // Update table with corresponding data
+            } else {
+                $('#scrollable-zone tbody').empty(); // Clear the table if no data
+            }
+        });
+    });
+</script>
+
+</body>
+
+</html>
