@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.css" />
     <link rel="stylesheet" href="./libs/dragula-master/dist/dragula.min.css" />
     <!--<link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />-->
-    <link rel="stylesheet" href="/path/to/leaflet.css" />
+    <!--<link rel="stylesheet" href="/path/to/leaflet.css" />-->
     <style>
 
         h1 {
@@ -426,22 +426,22 @@
                         <div class="container card col-lg-7 align-items-stretch">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="people-tab" data-bs-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</button>
+                                    <a class="nav-link active" id="people-tab" data-bs-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="true">People</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="location-tab" data-bs-toggle="tab" href="#location" role="tab" aria-controls="location" aria-selected="false">Location</button>
+                                    <a class="nav-link" id="location-tab" data-bs-toggle="tab" href="#location" role="tab" aria-controls="location" aria-selected="false">Location</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="applications-tab" data-bs-toggle="tab" href="#applications" role="tab" aria-controls="applications" aria-selected="false">Applications</button>
+                                    <a class="nav-link" id="applications-tab" data-bs-toggle="tab" href="#applications" role="tab" aria-controls="applications" aria-selected="false">Applications</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="hardware-tab" data-bs-toggle="tab" href="#hardware" role="tab" aria-controls="hardware" aria-selected="false">Hardware</button>
+                                    <a class="nav-link" id="hardware-tab" data-bs-toggle="tab" href="#hardware" role="tab" aria-controls="hardware" aria-selected="false">Hardware</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="suppliers-tab" data-bs-toggle="tab" href="#suppliers" role="tab" aria-controls="suppliers" aria-selected="false">Suppliers</button>
+                                    <a class="nav-link" id="suppliers-tab" data-bs-toggle="tab" href="#suppliers" role="tab" aria-controls="suppliers" aria-selected="false">Suppliers</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="data-tab" data-bs-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</button>
+                                    <a class="nav-link" id="data-tab" data-bs-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
@@ -546,7 +546,7 @@
     <script src="./libs/dragula-master/dist/dragula.js"></script>
     <script src="./libs/dragula-master/dist/dragula.min.js"></script>
     <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
-    <script src="/path/to/leaflet.js"></script>
+    <!--<script src="/path/to/leaflet.js"></script>-->
     <!--<script src="./js/wb_dragdrop.js"></script>-->
 <script>
     $(document).ready(function () {
@@ -620,12 +620,20 @@
             data: dataRoles
         };
 
+        // Function to generate unique key for service + tab combination
+        function generateStateKey(service, tab) {
+            return `${service}_${tab}`;
+        }
+
         // Function to load items into Drop Zone 1 based on tab and dropdown selection
         function loadDropZone1Items(selectedService, activeTab) {
+            console.log("Loading items for service: " + selectedService + ", Tab: " + activeTab); // Debugging line
+
             $('#scrollable-zone').empty();
 
             // Restore saved state for the selected service and active tab
-            const savedState = JSON.parse(localStorage.getItem(selectedService)) || null;
+            const stateKey = generateStateKey(selectedService, activeTab);
+            const savedState = JSON.parse(localStorage.getItem(stateKey)) || null;
             if (savedState) {
                 const dropZone2ItemsText = savedState.dropZone2.flatMap(zone => zone.items.map(item => item.split('<br>')[0]));
                 const remainingItems = tabRoleMap[activeTab].filter(role => !dropZone2ItemsText.includes(role));
@@ -637,11 +645,13 @@
                     $('#scrollable-zone').append(`<div class="item" data-original="${item}">${item}</div>`);
                 });
             }
+
             sortDropZone1(); // Sort Drop Zone 1 items in ascending order
         }
 
         // Function to handle save state for the selected service
-        function saveServiceState(service) {
+        function saveServiceState(service, tab) {
+            const stateKey = generateStateKey(service, tab);
             const dropZone1Items = $('#scrollable-zone .item').map(function () {
                 return $(this).text();
             }).get();
@@ -658,22 +668,23 @@
                 });
             });
 
-            localStorage.setItem(service, JSON.stringify({
+            localStorage.setItem(stateKey, JSON.stringify({
                 dropZone1: dropZone1Items,
                 dropZone2: dropZone2Items
             }));
         }
 
-        // Function to restore state for the selected service
-        function restoreServiceState(service) {
-            const savedState = JSON.parse(localStorage.getItem(service)) || null;
+        // Function to restore state for the selected service and tab
+        function restoreServiceState(service, tab) {
+            const stateKey = generateStateKey(service, tab);
+            const savedState = JSON.parse(localStorage.getItem(stateKey)) || null;
 
             $('#scrollable-zone').empty();
             $('.tab-pane').empty();
 
             if (savedState) {
                 const dropZone2ItemsText = savedState.dropZone2.flatMap(zone => zone.items.map(item => item.split('<br>')[0]));
-                const remainingItems = tabRoleMap['people'].filter(role => !dropZone2ItemsText.includes(role));
+                const remainingItems = tabRoleMap[tab].filter(role => !dropZone2ItemsText.includes(role));
 
                 remainingItems.forEach(item => {
                     $('#scrollable-zone').append(`<div class="item" data-original="${item}">${item}</div>`);
@@ -686,7 +697,7 @@
                     sortDropZone2(zone.zoneId);
                 });
             } else {
-                tabRoleMap['people'].forEach(item => {
+                tabRoleMap[tab].forEach(item => {
                     $('#scrollable-zone').append(`<div class="item" data-original="${item}">${item}</div>`);
                 });
             }
@@ -730,16 +741,12 @@
 
             // Save previous state and restore new state
             const previousService = $('#secondDropdown').data('previousService');
+            const activeTab = $('.nav-tabs .active').attr('href').substring(1);
             if (previousService !== undefined) {
-                saveServiceState(previousService);
+                saveServiceState(previousService, activeTab);
             }
             $('#secondDropdown').data('previousService', selectedService);
             updateItemsOnTabChange(); // Load the items for the active tab based on the selected service
-        });
-
-        // Handle tab change
-        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-            updateItemsOnTabChange(); // Update items when tab is changed
         });
 
         // Initialize Dragula for each tab-pane
@@ -793,7 +800,9 @@
                         $('#dropModal').modal('hide');
                         $(el).html(`${originalText}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
                         sortDropZone2(target.id);
-                        saveServiceState($('#secondDropdown').val());
+                        const selectedService = $('#secondDropdown').val();
+                        const activeTab = $('.nav-tabs .active').attr('href').substring(1); 
+                        saveServiceState(selectedService, activeTab);
                     } else {
                         // Focus on the first invalid field
                         $('.is-invalid').first().focus();
@@ -808,7 +817,9 @@
             } else if (source && target.id === 'scrollable-zone') {
                 $(el).html($(el).data('original'));
                 sortDropZone1();
-                saveServiceState($('#secondDropdown').val());
+                const selectedService = $('#secondDropdown').val();
+                const activeTab = $('.nav-tabs .active').attr('href').substring(1);
+                saveServiceState(selectedService, activeTab);
             }
         });
 
@@ -835,7 +846,9 @@
                 $(item).html(`${originalText}<br>WFH = ${wfh}, WAO = ${office}, Exclusive % = ${exclusive}%`);
 
                 // Save the state after updating the item
-                saveServiceState($('#secondDropdown').val());
+                const selectedService = $('#secondDropdown').val();
+                const activeTab = $('.nav-tabs .active').attr('href').substring(1);
+                saveServiceState(selectedService, activeTab);
 
                 $('#removeModal').modal('hide'); // Hide the remove modal
             });
@@ -846,7 +859,9 @@
                 $(item).html($(item).data('original')).appendTo($('#scrollable-zone')); // Move back to Drop Zone 1
                 sortDropZone1(); // Sort items in Drop Zone 1
                 sortDropZone2(item.closest('.tab-pane').id); // Sort Drop Zone 2
-                saveServiceState($('#secondDropdown').val()); // Save the state
+                const selectedService = $('#secondDropdown').val();
+                const activeTab = $('.nav-tabs .active').attr('href').substring(1);
+                saveServiceState(selectedService, activeTab);
             });
 
             // Cancel button action
@@ -875,6 +890,7 @@
             };
         }
 
+        // Ensure sorting happens in Drop Zone 1
         function sortDropZone1() {
             const items = $('#scrollable-zone .item').get();
             items.sort((a, b) => $(a).text().localeCompare($(b).text()));
@@ -889,15 +905,27 @@
 
         $(window).on('beforeunload', function () {
             const currentService = $('#secondDropdown').val();
+            const activeTab = $('.nav-tabs .active').attr('href').substring(1);
             if (currentService !== 'default') {
-                saveServiceState(currentService);
+                saveServiceState(currentService, activeTab);
+            }
+        });
+
+        // Refined tab switching event
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+            const selectedService = $('#secondDropdown').val(); // Get the current selected service from Drop Down List 2
+            const activeTab = $(this).attr('href').substring(1); // Get the ID of the newly activated tab
+
+            if (selectedService !== 'default') {
+                loadDropZone1Items(selectedService, activeTab); // Reload Drop Zone 1 items based on active tab and selected service
             }
         });
 
         $(document).ready(function () {
             const selectedService = $('#secondDropdown').val();
+            const activeTab = $('.nav-tabs .active').attr('href').substring(1);
             if (selectedService !== 'default') {
-                restoreServiceState(selectedService);
+                restoreServiceState(selectedService, activeTab);
             }
         });
     });
