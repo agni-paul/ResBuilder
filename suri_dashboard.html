@@ -50,7 +50,7 @@
             margin-left: 5px; /* Adds a small space between text and arrows */
             font-size: 0.8em; /* Adjusts size of the arrows */
         }
-        
+
         /* Style for progress bar percentage overlay */
         .progress {
             position: relative;
@@ -77,6 +77,7 @@
             align-items: center;
             justify-content: center;
         }
+
         /* Custom popover styling */
         .popover {
             max-width: 300px; /* Adjust the width of the popover */
@@ -96,19 +97,37 @@
             justify-content: space-between;
             padding: 5px 0;
         }
-        
-        /* Style for the progress bars inside the popover */
+
+        /* Ensure the styling for the popover's inner progress bars */
         .popover-progress {
             position: relative;
             height: 15px;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            background-color: #f5f5f5; /* Default background */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 10px; /* Space between bars */
         }
 
+        /* Styles for Popover Progress Bars with Solid Colors */
         .popover-progress-bar {
             height: 100%;
-            transition: width 0.4s ease;
+            transition: width 0.4s ease; /* Smooth transition */
+            border-radius: 5px; /* Match rounded corners */
+        }
+        
+        .popover-progress-bar.red {
+            background-color: #ff4d4d !important; /* Red */
+        }
+
+        .popover-progress-bar.yellow {
+            background-color: #ffcc00 !important; /* Yellow */
+        }
+
+        .popover-progress-bar.blue {
+            background-color: #66ccff !important; /* Light Blue */
+        }
+
+        .popover-progress-bar.green {
+            background-color: #33cc33 !important; /* Green */
         }
 
         .popover-text {
@@ -116,7 +135,7 @@
             width: 100%;
             text-align: center;
             font-weight: bold;
-            color: #fff;
+            color: #ffffff; /* Text color */
             top: 0;
             left: 0;
             height: 100%;
@@ -124,7 +143,13 @@
             align-items: center;
             justify-content: center;
         }
-        /* Button styled to look like a progress bar */
+
+        .popover-content {
+            font-family: Arial, sans-serif; /* Font styling */
+            padding: 10px; /* Padding around popover content */
+        }
+
+        /* Styling for main progress buttons */
         .btn-progress {
             border: none;
             display: inline-block;
@@ -145,9 +170,40 @@
             opacity: 0.85;
         }
 
-        /* Popover styling */
+        /* Solid color styles for main progress buttons */
+        .btn-progress.red {
+            background-color: #ff4d4d; /* Red */
+        }
+
+        .btn-progress.yellow {
+            background-color: #ffcc00; /* Yellow */
+        }
+
+        .btn-progress.blue {
+            background-color: #66ccff; /* Light Blue */
+        }
+
+        .btn-progress.green {
+            background-color: #33cc33; /* Green */
+        }
+
         .popover {
-            max-width: 300px; /* Adjust the width of the popover */
+            max-width: 300px;
+        }
+
+        .popover-header {
+            font-weight: bold;
+            background-color: #f5f5f5;
+        }
+
+        .popover-body {
+            padding: 10px;
+        }
+
+        .popover-category {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
         }
     </style>
 </head>
@@ -596,11 +652,18 @@ $(document).ready(function () {
 
     // Function to generate a single progress bar inside the popover
     function generatePopoverProgress(name, value) {
-        const color = getProgressColor(value);
+        // Determine the color class based on the progress value
+        let colorClass = '';
+        if (value <= 25) colorClass = 'red';
+        else if (value <= 50) colorClass = 'yellow';
+        else if (value <= 75) colorClass = 'blue';
+        else colorClass = 'green';
+
+        // Apply the corresponding color class to the popover progress bar
         return `
             <div>${name}</div>
             <div class="popover-progress">
-                <div class="popover-progress-bar" style="width: ${value}%; background-color: ${color};"></div>
+                <div class="popover-progress-bar ${colorClass}" style="width: ${value}%;"></div>
                 <span class="popover-text">${value}%</span>
             </div>
         `;
