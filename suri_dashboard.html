@@ -96,6 +96,59 @@
             justify-content: space-between;
             padding: 5px 0;
         }
+        
+        /* Style for the progress bars inside the popover */
+        .popover-progress {
+            position: relative;
+            height: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .popover-progress-bar {
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .popover-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
+            top: 0;
+            left: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Button styled to look like a progress bar */
+        .btn-progress {
+            border: none;
+            display: inline-block;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            height: 20px; /* Adjust as per your original progress bar height */
+            border-radius: 5px; /* Match the original progress bar style */
+            line-height: 1.2;
+            padding: 0;
+            color: #fff; /* Font color */
+        }
+
+        /* Optional: Hover effect for button-style progress bars */
+        .btn-progress:hover {
+            opacity: 0.85;
+        }
+
+        /* Popover styling */
+        .popover {
+            max-width: 300px; /* Adjust the width of the popover */
+        }
     </style>
 </head>
 
@@ -260,50 +313,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Service 1</td>
-                                            <td>Description 1</td>
-                                            <td>Department 1</td>
-                                            <td>Manager 1</td>
-                                            <td>Coordinator 1</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 85%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                                    </div>
-                                                    <span class="progress-text">85%</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-gear"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-info">
-                                                    <i class="bi bi-info-circle"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Service 2</td>
-                                            <td>Description 2</td>
-                                            <td>Department 2</td>
-                                            <td>Manager 2</td>
-                                            <td>Coordinator 2</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-                                                    </div>
-                                                    <span class="progress-text">75%</span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">
-                                                    <i class="bi bi-gear"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-info">
-                                                    <i class="bi bi-info-circle"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        <!-- This section will be dynamically populated -->
                                     </tbody>
                                 </table>
                             </div>
@@ -317,135 +327,174 @@
     <script src="./libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/sidebarmenu.js"></script>
     <script src="./js/app.min.js"></script>
-    <script src="./libs/apexcharts/dist/apexcharts.min.js"></script>
-    <script src="./libs/apexcharts/dist/apexcharts.esm.js"></script>
+    <!--<script src="./libs/apexcharts/dist/apexcharts.min.js"></script>-->
+    <!--<script src="./libs/apexcharts/dist/apexcharts.esm.js"></script>-->
     <script src="./libs/simplebar/dist/simplebar.js"></script>
-    <script src="./js/dashboard.js"></script>
+    <!--<script src="./js/dashboard.js"></script>-->
     <script src="./libs/dragula-master/dist/dragula.js"></script>
     <script src="./libs/dragula-master/dist/dragula.min.js"></script>
     <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
     <!--<script src="/path/to/leaflet.js"></script>-->
     <!--<script src="./js/wb_dragdrop.js"></script>-->
 <script>
-    $(document).ready(function () {
-        // Sorting functionality for table
-        $('th').on('click', function () {
-            var table = $(this).parents('table').eq(0);
-            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
-            this.asc = !this.asc;
-            if (!this.asc) {
-                rows = rows.reverse();
+$(document).ready(function () {
+    // Sample data for dynamic population
+    const departmentData = {
+        all: [
+            {
+                serviceName: 'All Services 1',
+                description: 'Description for All Services 1',
+                department: 'All Departments',
+                manager: 'Manager 1',
+                coordinator: 'Coordinator 1',
+                progress: 85,
+                people: 80,
+                location: 75,
+                application: 90,
+                hardware: 70,
+                suppliers: 60,
+                data: 95
             }
-            for (var i = 0; i < rows.length; i++) {
-                table.append(rows[i]);
-            }
-        });
+        ]
+    };
 
-        function comparer(index) {
-            return function (a, b) {
-                var valA = getCellValue(a, index), valB = getCellValue(b, index);
-                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+    function updateTable(data) {
+        const tbody = $('#scrollable-zone tbody');
+        tbody.empty(); // Clear the existing table rows
+
+        data.forEach(item => {
+            // Ensure all fields are valid and use default values if any are missing
+            const safeItem = {
+                serviceName: item.serviceName || "N/A",
+                description: item.description || "No Description",
+                department: item.department || "Unknown Department",
+                manager: item.manager || "No Manager",
+                coordinator: item.coordinator || "No Coordinator",
+                progress: item.progress || 0,
+                people: item.people || 0,
+                location: item.location || 0,
+                application: item.application || 0,
+                hardware: item.hardware || 0,
+                suppliers: item.suppliers || 0,
+                data: item.data || 0
             };
-        }
 
-        function getCellValue(row, index) {
-            return $(row).children('td').eq(index).text();
-        }
-
-        // Real-time search functionality for the first column (Service Name)
-        $('#searchBox').on('keyup', function () {
-            var searchTerm = $(this).val().toLowerCase(); // Get the search term
-            $('#scrollable-zone tbody tr').each(function () {
-                var serviceName = $(this).find('td').eq(0).text().toLowerCase(); // Get the first column's value
-                if (serviceName.indexOf(searchTerm) !== -1) {
-                    $(this).show(); // Show row if match
-                } else {
-                    $(this).hide(); // Hide row if no match
-                }
+            // Construct the JSON data for the progress details manually, ensuring it is valid
+            const progressDetails = JSON.stringify({
+                people: safeItem.people,
+                location: safeItem.location,
+                application: safeItem.application,
+                hardware: safeItem.hardware,
+                suppliers: safeItem.suppliers,
+                data: safeItem.data
             });
+
+            console.log("Constructed Progress Details:", progressDetails);
+
+            // Generate each table row using the safeItem values
+            const row = `
+                <tr>
+                    <td>${safeItem.serviceName}</td>
+                    <td>${safeItem.description}</td>
+                    <td>${safeItem.department}</td>
+                    <td>${safeItem.manager}</td>
+                    <td>${safeItem.coordinator}</td>
+                    <td>
+                        <button class="btn btn-progress popover-trigger" 
+                            data-progress-details='${progressDetails}'
+                            style="width: ${safeItem.progress}%; background-color: ${getProgressColor(safeItem.progress)}; color: #fff;">
+                            ${safeItem.progress}%
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary"><i class="bi bi-gear"></i></button>
+                        <button class="btn btn-sm btn-info"><i class="bi bi-info-circle"></i></button>
+                    </td>
+                </tr>
+            `;
+            tbody.append(row); // Append each row to the table body
         });
 
-        // Data for different departments
-        const departmentData = {
-            all: [
-                { serviceName: 'Service 1', description: 'Description 1', department: 'All Departments', manager: 'Manager 1', coordinator: 'Coordinator 1', progress: 50 },
-                { serviceName: 'Service 2', description: 'Description 2', department: 'All Departments', manager: 'Manager 2', coordinator: 'Coordinator 2', progress: 70 }
-            ],
-            group_operations: [
-                { serviceName: 'Group Service 1', description: 'Group Description 1', department: 'Group Operations', manager: 'Group Manager 1', coordinator: 'Group Coordinator 1', progress: 85 },
-                { serviceName: 'Group Service 2', description: 'Group Description 2', department: 'Group Operations', manager: 'Group Manager 2', coordinator: 'Group Coordinator 2', progress: 60 }
-            ],
-            resbuilder_bank: [
-                { serviceName: 'Bank Service 1', description: 'Bank Description 1', department: 'Bank Operations', manager: 'Bank Manager 1', coordinator: 'Bank Coordinator 1', progress: 95 },
-                { serviceName: 'Bank Service 2', description: 'Bank Description 2', department: 'Bank Operations', manager: 'Bank Manager 2', coordinator: 'Bank Coordinator 2', progress: 40 }
-            ],
-            fund_management: [
-                { serviceName: 'Fund Service 1', description: 'Fund Description 1', department: 'Fund Management', manager: 'Fund Manager 1', coordinator: 'Fund Coordinator 1', progress: 30 },
-                { serviceName: 'Fund Service 2', description: 'Fund Description 2', department: 'Fund Management', manager: 'Fund Manager 2', coordinator: 'Fund Coordinator 2', progress: 80 }
-            ],
-            ventures: [
-                { serviceName: 'Ventures Service 1', description: 'Ventures Description 1', department: 'Ventures', manager: 'Ventures Manager 1', coordinator: 'Ventures Coordinator 1', progress: 65 },
-                { serviceName: 'Ventures Service 2', description: 'Ventures Description 2', department: 'Ventures', manager: 'Ventures Manager 2', coordinator: 'Ventures Coordinator 2', progress: 20 }
-            ]
-        };
+        // Initialize popovers for dynamically generated rows
+        initializePopovers();
+    }
 
-        // Function to dynamically update the table rows
-        // Function to dynamically update the table rows with color gradient
-        function updateTable(data) {
-            const tbody = $('#scrollable-zone tbody');
-            tbody.empty(); // Clear the table first
-            data.forEach(item => {
-                const row = `
-                    <tr>
-                        <td>${item.serviceName}</td>
-                        <td>${item.description}</td>
-                        <td>${item.department}</td>
-                        <td>${item.manager}</td>
-                        <td>${item.coordinator}</td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" role="progressbar" style="width: ${item.progress}%; background-color: ${getProgressColor(item.progress)};" aria-valuenow="${item.progress}" aria-valuemin="0" aria-valuemax="100"></div>
-                                <span class="progress-text">${item.progress}%</span>
-                            </div>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary"><i class="bi bi-gear"></i></button>
-                            <button class="btn btn-sm btn-info"><i class="bi bi-info-circle"></i></button>
-                        </td>
-                    </tr>
-                `;
-                tbody.append(row);
-            });
-        }
+    function initializePopovers() {
+        // Re-initialize popovers for all buttons with data-progress-details
+        $('.btn-progress').each(function () {
+            const details = $(this).attr('data-progress-details');
+            console.log("Popover Data on Init: ", details); // Debugging: Log the JSON data
 
-        // Function to determine the progress bar color based on completion percentage
-        function getProgressColor(progress) {
-            if (progress <= 25) {
-                return '#ff4d4d'; // Red
-            } else if (progress <= 50) {
-                return '#ffcc00'; // Yellow
-            } else if (progress <= 75) {
-                return '#66ccff'; // Light Blue
-            } else {
-                return '#33cc33'; // Green
-            }
-        }
-
-        // Ensure the table is empty on page load
-        $('#scrollable-zone tbody').empty();
-
-        // Handle dropdown change event
-        $('#firstDropdown').on('change', function () {
-            const selectedValue = $(this).val();
-            if (selectedValue === 'default') {
-                $('#scrollable-zone tbody').empty(); // Clear the table if "Please select" is selected
-            } else if (departmentData[selectedValue]) {
-                updateTable(departmentData[selectedValue]); // Update table with corresponding data
-            } else {
-                $('#scrollable-zone tbody').empty(); // Clear the table if no data
+            if (details && details !== 'undefined') {
+                // Safely attach popover if details are valid
+                $(this).popover({
+                    trigger: 'hover click',
+                    html: true,
+                    content: function () {
+                        try {
+                            const item = JSON.parse(details);
+                            return showPopover(item);
+                        } catch (e) {
+                            console.error("JSON Parse Error: ", e);
+                            return "<div>Error parsing details.</div>";
+                        }
+                    },
+                    placement: 'top'
+                });
             }
         });
+    }
+
+    // Function to show popover with multiple progress bars
+    function showPopover(item) {
+        return `
+            <div class="popover-content">
+                <h5 class="popover-header">Mapping Completion Status</h5>
+                ${generatePopoverProgress('People', item.people)}
+                ${generatePopoverProgress('Location', item.location)}
+                ${generatePopoverProgress('Application', item.application)}
+                ${generatePopoverProgress('Hardware', item.hardware)}
+                ${generatePopoverProgress('Suppliers', item.suppliers)}
+                ${generatePopoverProgress('Data', item.data)}
+            </div>
+        `;
+    }
+
+    // Function to generate a single progress bar inside the popover
+    function generatePopoverProgress(name, value) {
+        const color = getProgressColor(value);
+        return `
+            <div>${name}</div>
+            <div class="popover-progress">
+                <div class="popover-progress-bar" style="width: ${value}%; background-color: ${color};"></div>
+                <span class="popover-text">${value}%</span>
+            </div>
+        `;
+    }
+
+    // Function to determine the progress bar and category colors based on completion percentage
+    function getProgressColor(progress) {
+        if (progress <= 25) return '#ff4d4d'; // Red
+        else if (progress <= 50) return '#ffcc00'; // Yellow
+        else if (progress <= 75) return '#66ccff'; // Light Blue
+        else return '#33cc33'; // Green
+    }
+
+    // Handle dropdown change event to dynamically populate the table
+    $('#firstDropdown').on('change', function () {
+        const selectedValue = $(this).val();
+        if (selectedValue === 'default') {
+            $('#scrollable-zone tbody').empty(); // Clear the table if "Please select" is selected
+        } else if (departmentData[selectedValue]) {
+            updateTable(departmentData[selectedValue]); // Update table with corresponding data
+        } else {
+            $('#scrollable-zone tbody').empty(); // Clear the table if no data
+        }
     });
+
+    // Initially clear the table on page load
+    $('#scrollable-zone tbody').empty();
+});
 </script>
 
 </body>
