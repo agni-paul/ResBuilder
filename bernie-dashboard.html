@@ -480,6 +480,56 @@
                     </div>
                   </div>
                 </div>
+                
+                <!-- Update Business Service Modal -->
+                <div class="modal fade" id="updateServiceModal" tabindex="-1" role="dialog" aria-labelledby="updateServiceModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="updateServiceModalLabel">Update Business Service</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="updateServiceForm">
+                                    <div class="form-group">
+                                        <label for="serviceName">Service Name</label>
+                                        <input type="text" class="form-control" id="serviceName" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <input type="text" class="form-control" id="description">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="company">Company</label>
+                                        <input type="text" class="form-control" id="company">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="execDomain">Exec Domain</label>
+                                        <input type="text" class="form-control" id="execDomain">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="department">Department</label>
+                                        <input type="text" class="form-control" id="department">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="businessUnit">Business Unit</label>
+                                        <input type="text" class="form-control" id="businessUnit">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productCategory">Product Category</label>
+                                        <input type="text" class="form-control" id="productCategory">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="updateServiceBtn">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -775,7 +825,7 @@
                             <button class="btn btn-sm btn-success">
                                 <i class="bi bi-tools"></i>
                             </button>
-                            <button class="btn btn-sm btn-warning">
+                            <button class="btn btn-sm btn-warning edit-service">
                                 <i class="bi bi-pencil"></i>
                             </button>
                             <button class="btn btn-sm btn-danger">
@@ -792,6 +842,8 @@
         //initializeViewServicePopovers(); // Initialize popovers for view buttons
         initializeTooltips(); // Initialize tooltips for dynamically generated rows
         initializeViewServiceModals();// Initialize modal for the service eye button
+            // Call this function after table content is dynamically updated
+    initializeUpdateBusinessServiceModals();
     }
 
     function setupSearchFilter() {
@@ -931,8 +983,45 @@
             }
         });
     });
-
     
+    // Function to populate the "Update Business Service" modal with data
+    function populateUpdateServiceModal(service) {
+        $('#updateServiceName').val(service.serviceName);
+        $('#updateDescription').val(service.description);
+        $('#updateCompany').val("ResBuilder Ltd");  // Default value for Company
+        $('#updateExecDomain').val("Default Domain"); // Default value for Exec Domain
+        $('#updateDepartment').val(service.department);
+        $('#updateBusinessUnit').val("Default Business Unit"); // Default value for Business Unit
+        $('#updateProductCategory').val("Default Category"); // Default value for Product Category
+    }
+
+    // Event handler for updating the service details based on user input
+    $('#updateServiceButton').off('click').on('click', function () {
+        const updatedService = {
+            serviceName: $('#updateServiceName').val(),
+            description: $('#updateDescription').val(),
+            department: $('#updateDepartment').val(),
+            // Fixed fields that may not need user edits:
+            company: $('#updateCompany').val(),
+            execDomain: $('#updateExecDomain').val(),
+            businessUnit: $('#updateBusinessUnit').val(),
+            productCategory: $('#updateProductCategory').val()
+        };
+
+        // Find the matching row in the table using serviceName and update its values
+        $('#scrollable-zone tbody tr').each(function () {
+            const rowServiceName = $(this).find('td:first').text().trim();
+            if (rowServiceName === updatedService.serviceName) {
+                // Update the relevant columns in the row
+                $(this).find('td:nth-child(2)').text(updatedService.description); // Update Description
+                $(this).find('td:nth-child(3)').text(updatedService.department); // Update Department
+            }
+        });
+
+        // Close the modal dialog after the update
+        $('#updateBusinessServiceModal').modal('hide');
+    });
+
     // Additional function to handle popovers separately for progress buttons
     function initializePopovers() {
         $('.btn-progress').each(function () {
@@ -1027,6 +1116,54 @@
 
     // Initially clear the table on page load
     $('#scrollable-zone tbody').empty();
+        
+    // Function to initialize and bind the "Update Business Service" modal with the pencil button
+    function initializeUpdateBusinessServiceModals() {
+        $('.edit-service').off('click').on('click', function () {
+            const $row = $(this).closest('tr'); // Identify the row where the button is located
+
+            // Extract values from the corresponding columns in the row
+            const serviceName = $row.find('td:nth-child(1)').text();
+            const description = $row.find('td:nth-child(2)').text();
+            const department = $row.find('td:nth-child(3)').text();
+            const businessManager = $row.find('td:nth-child(4)').text();
+            const resCoordinator = $row.find('td:nth-child(5)').text();
+
+            // Static or default values for some fields (adjust as needed)
+            const company = "Bank of ResBuilder Ltd"; 
+            const execDomain = "Default Domain"; 
+            const businessUnit = "Default Business Unit"; 
+            const productCategory = "Default Category"; 
+
+            // Populate the modal fields with the values
+            $('#updateServiceName').val(serviceName);
+            $('#updateDescription').val(description);
+            $('#updateCompany').val(company);
+            $('#updateExecDomain').val(execDomain);
+            $('#updateDepartment').val(department);
+            $('#updateBusinessUnit').val(businessUnit);
+            $('#updateProductCategory').val(productCategory);
+
+            // Show the modal
+            $('#updateServiceModal').modal('show');
+
+            // Handle update button click event
+            $('#updateServiceBtn').off('click').on('click', function () {
+                // Update the table row with the new values from the modal
+                $row.find('td:nth-child(1)').text($('#updateServiceName').val());
+                $row.find('td:nth-child(2)').text($('#updateDescription').val());
+                $row.find('td:nth-child(3)').text($('#updateDepartment').val());
+                $row.find('td:nth-child(4)').text(businessManager); // Static field value (can be dynamic)
+                $row.find('td:nth-child(5)').text(resCoordinator);  // Static field value (can be dynamic)
+
+                // Close the modal
+                $('#updateServiceModal').modal('hide');
+            });
+        });
+    }
+
+    // Call this function after table content is dynamically updated
+    initializeUpdateBusinessServiceModals();
 });
 </script>
 
