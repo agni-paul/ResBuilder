@@ -237,6 +237,54 @@
         .button-group .btn {
             margin: 0 2px; /* Add slight spacing between buttons */
         }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.4em 0.7em;
+            font-size: 0.75em;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-primary {
+            background-color: #007bff;
+        }
+
+        .badge-secondary {
+            background-color: #6c757d;
+        }
+        
+        .tooltip-inner {
+            background-color: #333 !important; /* Darker background for better visibility */
+            color: #fff; /* White text */
+            max-width: 200px; /* Set the max width for tooltips */
+            text-align: center; /* Center align text */
+        }
+
+        .tooltip-arrow {
+            display: none; /* Optionally hide the arrow for a cleaner look */
+        }
+        
+        #no-results-message {
+            font-size: 1rem;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #6c757d; /* Gray text color */
+        }
     </style>
 </head>
 
@@ -375,7 +423,7 @@
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <input type="text" id="searchBox" class="form-control" placeholder="Search...">
+                                        <input type="text" id="searchBox" class="form-control" placeholder="Search by Service Name...">
                                     </div>
                                 </div>
                             </div>
@@ -396,7 +444,10 @@
                                             <th>Business Manager <span class="sort-arrows">▲▼</span></th>
                                             <th>Res Coordinator <span class="sort-arrows">▲▼</span></th>
                                             <th>Dependency Mapping Progress <span class="sort-arrows">▲▼</span></th>
-                                            <th></th>
+                                            <th>Vulnerability Scoring Progress <span class="sort-arrows">▲▼</span></th>
+                                            <th>Vulnerability Level <span class="sort-arrows">▲▼</span></th>
+                                            <th>Criticality Level <span class="sort-arrows">▲▼</span></th>
+                                            <th></th> <!-- Empty column for buttons -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -406,6 +457,28 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Modal Structure for View Business Service -->
+                <div class="modal fade" id="viewBusinessServiceModal" tabindex="-1" aria-labelledby="viewBusinessServiceLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="viewBusinessServiceLabel">View Business Service</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table table-bordered">
+                          <tbody id="modalServiceDetails">
+                            <!-- Rows will be dynamically generated here -->
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
             </div>
         </div>
@@ -423,10 +496,10 @@
     <!--<script src="./libs/tabmaster/tabscript.js"></script>-->
     <!--<script src="/path/to/leaflet.js"></script>-->
     <!--<script src="./js/wb_dragdrop.js"></script>-->
-<script>
-$(document).ready(function () {
-    // Sample data for dynamic population
-    const departmentData = {
+    <script>
+    $(document).ready(function () {
+        // Sample data for dynamic population
+        const departmentData = {
         all: [
             {
                 serviceName: 'All Services 1',
@@ -435,6 +508,9 @@ $(document).ready(function () {
                 manager: 'Manager 1',
                 coordinator: 'Coordinator 1',
                 progress: 85,
+                vulnerabilityScore: 75,
+                vulnerabilityLevel: 'Major',
+                criticalityLevel: 'Critical',
                 people: 80,
                 location: 75,
                 application: 90,
@@ -449,6 +525,9 @@ $(document).ready(function () {
                 manager: 'Manager 2',
                 coordinator: 'Coordinator 2',
                 progress: 65,
+                vulnerabilityScore: 50,
+                vulnerabilityLevel: 'Minor',
+                criticalityLevel: 'Major',
                 people: 60,
                 location: 55,
                 application: 70,
@@ -465,6 +544,9 @@ $(document).ready(function () {
                 manager: 'Group Ops Manager 1',
                 coordinator: 'Group Ops Coordinator 1',
                 progress: 75,
+                vulnerabilityScore: 80,
+                vulnerabilityLevel: 'Critical',
+                criticalityLevel: 'Critical',
                 people: 65,
                 location: 80,
                 application: 60,
@@ -479,6 +561,9 @@ $(document).ready(function () {
                 manager: 'Group Ops Manager 2',
                 coordinator: 'Group Ops Coordinator 2',
                 progress: 55,
+                vulnerabilityScore: 40,
+                vulnerabilityLevel: 'Minor',
+                criticalityLevel: 'Scoring Incomplete',
                 people: 45,
                 location: 60,
                 application: 50,
@@ -495,6 +580,9 @@ $(document).ready(function () {
                 manager: 'Bank Manager 1',
                 coordinator: 'Bank Coordinator 1',
                 progress: 85,
+                vulnerabilityScore: 90,
+                vulnerabilityLevel: 'Critical',
+                criticalityLevel: 'Critical',
                 people: 80,
                 location: 75,
                 application: 90,
@@ -509,6 +597,9 @@ $(document).ready(function () {
                 manager: 'Bank Manager 2',
                 coordinator: 'Bank Coordinator 2',
                 progress: 65,
+                vulnerabilityScore: 60,
+                vulnerabilityLevel: 'Major',
+                criticalityLevel: 'Major',
                 people: 60,
                 location: 55,
                 application: 70,
@@ -525,6 +616,9 @@ $(document).ready(function () {
                 manager: 'Fund Manager 1',
                 coordinator: 'Fund Coordinator 1',
                 progress: 70,
+                vulnerabilityScore: 55,
+                vulnerabilityLevel: 'Minor',
+                criticalityLevel: 'Major',
                 people: 60,
                 location: 55,
                 application: 75,
@@ -539,6 +633,9 @@ $(document).ready(function () {
                 manager: 'Fund Manager 2',
                 coordinator: 'Fund Coordinator 2',
                 progress: 50,
+                vulnerabilityScore: 30,
+                vulnerabilityLevel: 'Scoring Incomplete',
+                criticalityLevel: 'Minor',
                 people: 40,
                 location: 45,
                 application: 50,
@@ -555,6 +652,9 @@ $(document).ready(function () {
                 manager: 'Ventures Manager 1',
                 coordinator: 'Ventures Coordinator 1',
                 progress: 90,
+                vulnerabilityScore: 95,
+                vulnerabilityLevel: 'Critical',
+                criticalityLevel: 'Critical',
                 people: 85,
                 location: 80,
                 application: 95,
@@ -569,6 +669,9 @@ $(document).ready(function () {
                 manager: 'Ventures Manager 2',
                 coordinator: 'Ventures Coordinator 2',
                 progress: 60,
+                vulnerabilityScore: 40,
+                vulnerabilityLevel: 'Minor',
+                criticalityLevel: 'Scoring Incomplete',
                 people: 50,
                 location: 55,
                 application: 60,
@@ -584,7 +687,6 @@ $(document).ready(function () {
         tbody.empty(); // Clear the existing table rows
 
         data.forEach(item => {
-            // Ensure all fields are valid and use default values if any are missing
             const safeItem = {
                 serviceName: item.serviceName || "N/A",
                 description: item.description || "No Description",
@@ -592,6 +694,9 @@ $(document).ready(function () {
                 manager: item.manager || "No Manager",
                 coordinator: item.coordinator || "No Coordinator",
                 progress: item.progress || 0,
+                vulnerabilityScore: item.vulnerabilityScore || 0, // New vulnerability score field
+                vulnerabilityLevel: item.vulnerabilityLevel || "Scoring Incomplete", 
+                criticalityLevel: item.criticalityLevel || "Scoring Incomplete", 
                 people: item.people || 0,
                 location: item.location || 0,
                 application: item.application || 0,
@@ -600,8 +705,8 @@ $(document).ready(function () {
                 data: item.data || 0
             };
 
-            // Construct the JSON data for the progress details manually, ensuring it is valid
-            const progressDetails = JSON.stringify({
+            // Construct the JSON data for the progress details for both columns
+            const dependencyProgressDetails = JSON.stringify({
                 people: safeItem.people,
                 location: safeItem.location,
                 application: safeItem.application,
@@ -610,9 +715,19 @@ $(document).ready(function () {
                 data: safeItem.data
             });
 
-            console.log("Constructed Progress Details:", progressDetails);
+            // New vulnerability progress details
+            const vulnerabilityProgressDetails = JSON.stringify({
+                people: safeItem.people,
+                location: safeItem.location,
+                application: safeItem.application,
+                hardware: safeItem.hardware,
+                suppliers: safeItem.suppliers,
+                data: safeItem.data
+            });
 
-            // Generate each table row using the safeItem values
+            const vulnerabilityStyle = getBadgeStyle(safeItem.vulnerabilityLevel);
+            const criticalityStyle = getBadgeStyle(safeItem.criticalityLevel);
+
             const row = `
                 <tr>
                     <td>${safeItem.serviceName}</td>
@@ -621,58 +736,118 @@ $(document).ready(function () {
                     <td>${safeItem.manager}</td>
                     <td>${safeItem.coordinator}</td>
                     <td>
+                        <!-- Dependency Mapping Progress Button -->
                         <button class="btn btn-progress popover-trigger" 
-                            data-progress-details='${progressDetails}'
+                            data-progress-details='${dependencyProgressDetails}'
                             style="width: ${safeItem.progress}%; background-color: ${getProgressColor(safeItem.progress)}; color: #fff;">
                             ${safeItem.progress}%
                         </button>
                     </td>
                     <td>
+                        <!-- Vulnerability Scoring Progress Button -->
+                        <button class="btn btn-progress popover-trigger" 
+                            data-progress-details='${vulnerabilityProgressDetails}'
+                            style="width: ${safeItem.vulnerabilityScore}%; background-color: ${getProgressColor(safeItem.vulnerabilityScore)}; color: #fff;">
+                            ${safeItem.vulnerabilityScore}%
+                        </button>
+                    </td>
+                    <td>
+                        <!-- Vulnerability Level Badge with Tooltip -->
+                        <span class="badge ${vulnerabilityStyle}" 
+                            data-toggle="tooltip" 
+                            title="Vulnerability Level: ${safeItem.vulnerabilityLevel}">
+                            ${safeItem.vulnerabilityLevel}
+                        </span>
+                    </td>
+                    <td>
+                        <!-- Criticality Level Badge with Tooltip -->
+                        <span class="badge ${criticalityStyle}" 
+                            data-toggle="tooltip" 
+                            title="Criticality Level: ${safeItem.criticalityLevel}">
+                            ${safeItem.criticalityLevel}
+                        </span>
+                    </td>
+                    <td>
                         <div class="button-group">
-                            <button class="btn btn-sm btn-info view-service" data-service-id="${safeItem.serviceName}" style="background-color: #007bff; border: none;">
+                            <button class="btn btn-sm btn-info view-service" data-service-id="${safeItem.serviceName}">
                                 <i class="bi bi-eye"></i>
                             </button>
-                            <button class="btn btn-sm btn-success" style="background-color: #28a745; border: none;">
+                            <button class="btn btn-sm btn-success">
                                 <i class="bi bi-tools"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-x-circle"></i>
                             </button>
                         </div>
                     </td>
                 </tr>
             `;
-            tbody.append(row); // Append each row to the table body
-            initializeViewServicePopovers(); // Initialize popovers for view-service buttons
+            tbody.append(row); 
         });
 
-        // Initialize popovers for dynamically generated rows
-        initializePopovers();
+        initializePopovers(); // Initialize popovers for progress bars
+        //initializeViewServicePopovers(); // Initialize popovers for view buttons
+        initializeTooltips(); // Initialize tooltips for dynamically generated rows
+        initializeViewServiceModals();// Initialize modal for the service eye button
     }
 
-    // Function to handle the view popover for business services
-    function initializeViewServicePopovers() {
-        // Destroy existing popovers if any, before re-initializing
-        $('.view-service').popover('dispose');
+    function setupSearchFilter() {
+        $('#searchBox').on('keyup', function () {
+            const searchValue = $(this).val().toLowerCase();
+            const rows = $('#scrollable-zone tbody tr:not(#no-results-message)'); // Select all rows except the 'no-results-message'
+            let visibleCount = 0;
 
-        // Attach popover to each "view-service" button
-        $('.view-service').popover({
-            trigger: 'click',
-            html: true,
-            placement: 'right',
-            container: 'body',
-            content: function () {
-                const serviceId = $(this).attr('data-service-id');
-                const serviceData = findServiceData(serviceId);
-                if (serviceData) {
-                    return generateServicePopoverContent(serviceData);
+            rows.each(function () {
+                const serviceName = $(this).find('td:first').text().toLowerCase();
+                if (serviceName.includes(searchValue)) {
+                    $(this).show();
+                    visibleCount++;
                 } else {
-                    return '<strong>Error: No service data found!</strong>';
+                    $(this).hide();
                 }
+            });
+
+            // Toggle the display of the No Results message
+            if (visibleCount === 0) {
+                $('#no-results-message').show(); // Show the No Results row
+            } else {
+                $('#no-results-message').hide(); // Hide the No Results row
             }
         });
     }
 
+    // Call this function after dynamically updating the table content
+    updateTable(departmentData['all']); // Initial table load
+    initializeAllInteractions(); // Initialize all interactions
+        
+    // Helper function to get badge style based on the criticality level
+    function getBadgeStyle(level) {
+        switch (level) {
+            case 'Critical':
+                return 'badge-danger';
+            case 'Major':
+                return 'badge-warning';
+            case 'Minor':
+                return 'badge-primary';
+            case 'Scoring Incomplete':
+                return 'badge-secondary';
+            default:
+                return 'badge-secondary';
+        }
+    }
+
     // Function to find the service data based on the service name
     function findServiceData(serviceName) {
-        // Loop through each department's data to find a matching service
+        console.log("Looking for Service Data:", serviceName); // Log serviceName
+
+        if (!serviceName) {
+            console.error("findServiceData Error: Invalid serviceName parameter.");
+            return null;
+        }
+
         for (const key in departmentData) {
             const services = departmentData[key];
             for (let service of services) {
@@ -681,6 +856,7 @@ $(document).ready(function () {
                 }
             }
         }
+        console.log("No matching service found for:", serviceName);
         return null; // Return null if no matching service is found
     }
 
@@ -704,6 +880,48 @@ $(document).ready(function () {
         `;
     }
 
+    // Updated function to initialize the modals for viewing business services
+    function initializeViewServiceModals() {
+        $('.view-service').off('click').on('click', function () {
+            const serviceId = $(this).attr('data-service-id');
+            console.log("View Button Clicked: Service ID =", serviceId);
+
+            // Validate the serviceId before proceeding
+            if (!serviceId || serviceId === "undefined") {
+                alert("Error: Invalid service ID detected.");
+                return;
+            }
+
+            const serviceData = findServiceData(serviceId);
+            if (serviceData) {
+                populateServiceModal(serviceData);
+                $('#viewBusinessServiceModal').modal('show'); // Show the modal dialog
+            } else {
+                alert("Error: No service data found!");
+            }
+        });
+    }
+    
+    // Function to populate the service modal with the correct details
+    function populateServiceModal(service) {
+        const modalBody = $('#modalServiceDetails');
+        modalBody.empty(); // Clear previous content
+
+        // Populate modal content dynamically
+        const serviceRows = `
+            <tr><th>Service Name</th><td>${service.serviceName}</td></tr>
+            <tr><th>Description</th><td>${service.description}</td></tr>
+            <tr><th>Exec Domain</th><td>Default Domain</td></tr>
+            <tr><th>Department</th><td>${service.department}</td></tr>
+            <tr><th>Business Unit</th><td>Default Business Unit</td></tr>
+            <tr><th>Product Category</th><td>Default Category</td></tr>
+            <tr><th>Business Manager</th><td>${service.manager}</td></tr>
+            <tr><th>Res Coordinator</th><td>${service.coordinator}</td></tr>
+            <tr><th>Company</th><td>Bank of ResBuilder Ltd</td></tr>
+        `;
+        modalBody.append(serviceRows); // Append new rows to modal
+    }
+ 
     // Update the event handler for dynamically generated rows
     $(document).on('click', function (e) {
         $('[data-toggle="popover"]').each(function () {
@@ -715,14 +933,11 @@ $(document).ready(function () {
     });
 
     
+    // Additional function to handle popovers separately for progress buttons
     function initializePopovers() {
-        // Re-initialize popovers for all buttons with data-progress-details
         $('.btn-progress').each(function () {
             const details = $(this).attr('data-progress-details');
-            console.log("Popover Data on Init: ", details); // Debugging: Log the JSON data
-
             if (details && details !== 'undefined') {
-                // Safely attach popover if details are valid
                 $(this).popover({
                     trigger: 'hover click',
                     html: true,
@@ -740,8 +955,23 @@ $(document).ready(function () {
             }
         });
     }
+    
+    // Function to initialize Bootstrap tooltips
+    function initializeTooltips() {
+        $('[data-toggle="tooltip"]').tooltip(); // Attach tooltips to elements with 'data-toggle="tooltip"'
+    }
+    
+    // Call this function to initialize all popovers, modals, and tooltips after table update
+    function initializeAllInteractions() {
+        initializePopovers();
+        initializeViewServiceModals();
+        initializeTooltips();
+        setupSearchFilter(); // Attach search filter functionality
+    }
 
-    // Function to show popover with multiple progress bars
+    // Call this function after dynamically updating the table content
+    updateTable(departmentData['all']); // Example for 'all' department on load
+        
     function showPopover(item) {
         return `
             <div class="popover-content">
