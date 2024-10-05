@@ -19,13 +19,12 @@
         box-shadow: 0px 0px 10px rgba(82, 63, 105, 0.1);
         border-radius: 8px;
         margin-bottom: 20px;
-        min-height: 600px; /* Set a consistent height */
     }
     
-    /* Set equal height for the two main cards */
+    /* Remove Fixed Height for Main Cards */
     .card-margin {
-        min-height: 550px;
-        max-height: 550px; /* Ensures both main cards have a base height */
+        min-height: auto; /* Allow dynamic height */
+        max-height: auto; /* No fixed height */
     }
     
     /* Main Card Adjustment */
@@ -54,9 +53,11 @@
         align-items: stretch; /* Ensures both main cards have equal height */
     }
     
+    /* Adjust Card Body Overflow */
     .card-body {
         flex: 1;
-        padding: 20px; /* Adjust the card body padding for better spacing */
+        padding: 20px;
+        overflow-y: auto; /* Enable scroll if content overflows */
     }
     
     .card-header h6 {
@@ -143,6 +144,72 @@
         left: 20px;
         right: 10px; /* Positioned at the bottom-right */
         max-width: calc(100% - 20px); /* Adjust width to prevent overflow */
+    }
+    
+    .table-responsive {
+        border-radius: 12px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Table shadow effect */
+    }
+
+    .table thead th {
+        font-weight: 600; /* Header Styling */
+    }
+
+    .table-bordered {
+        border: 1px solid #ddd; /* Standard border */
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .d-flex.justify-content-between.align-items-center {
+            flex-direction: column;
+        }
+
+        .col-6.p-2 {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        #pie-chart,
+        #breakup,
+        #breakup1,
+        #breakup2,
+        #breakup3 {
+            width: 100% !important;
+            height: auto !important;
+        }
+    }
+
+    /* Further responsive adjustments for smaller screens */
+    @media (max-width: 1200px) {
+        .card.card-margin .card-body > .d-flex > div {
+            flex: 1 1 100%;
+            max-width: 100%;
+            margin: 10px 0;
+        }
+    }
+    
+        /* Pie Chart Container Styling */
+    .card-margin .card-body .d-flex {
+        flex-wrap: wrap;
+    }
+
+    /* Remove Conflicting Styles */
+    .card-margin .card-body .d-flex > div {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Chart Container Adjustments */
+    #breakup, #breakup1, #breakup2, #breakup3 {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 90%;
+        margin: 0 auto;
     }
 </style>
 
@@ -262,77 +329,167 @@
                 </nav>
             </header>
                      
-<div class="container-fluid">
-    <!-- Main Row for Domain Monitoring and Business Service Mapping Cards -->
-    <div class="row g-4">
-        <!-- Domain Monitoring Card -->
-        <div class="col-lg-8 d-flex align-items-stretch">
-            <div class="card w-100 card-margin" id="domain-monitoring-card">
-                <div class="card-body">
-                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-4">
-                        <div class="mb-3 mb-sm-0">
-                            <h5 class="card-title fw-semibold">Domain Monitoring</h5>
-                            <span class="fw-normal">Severity of impact</span>
-                        </div>
-                        <div>
-                            <select class="form-select">
-                                <option value="1">Entity</option>
-                                <option value="2">People Roles</option>
-                                <option value="3">Locations</option>
-                                <option value="4">Applications</option>
-                                <option value="5">Hardware</option>
-                                <option value="6">Suppliers</option>
-                            </select>
-                        </div>
-                        <div>
-                            <select class="form-select">
-                                <option value="1">Value</option>
-                                <option value="2">1</option>
-                                <option value="3">2</option>
-                                <option value="4">3</option>
-                                <option value="5">4</option>
-                                <option value="5">5</option>
-                            </select>
+            <div class="container-fluid">
+                <!-- Main Row for Domain Monitoring and Business Service Mapping Cards -->
+                <div class="row g-4">
+                    <!-- Domain Monitoring Card -->
+                    <div class="col-lg-8 d-flex align-items-stretch">
+                        <div class="card w-100 card-margin" id="domain-monitoring-card">
+                            <div class="card-body">
+                                <div class="d-sm-flex d-block align-items-center justify-content-between mb-4">
+                                    <div class="mb-3 mb-sm-0">
+                                        <h5 class="card-title fw-semibold">Domain Monitoring</h5>
+                                        <span class="fw-normal">Severity of impact</span>
+                                    </div>
+                                    <div>
+                                        <select class="form-select">
+                                            <option value="1">Entity</option>
+                                            <option value="2">People Roles</option>
+                                            <option value="3">Locations</option>
+                                            <option value="4">Applications</option>
+                                            <option value="5">Hardware</option>
+                                            <option value="6">Suppliers</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <select class="form-select">
+                                            <option value="1">Value</option>
+                                            <option value="2">1</option>
+                                            <option value="3">2</option>
+                                            <option value="4">3</option>
+                                            <option value="5">4</option>
+                                            <option value="5">5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="chart" style="height: 350px;"></div>
+                            </div>
                         </div>
                     </div>
-                    <div id="chart" style="height: 350px;"></div>
+
+                    <!-- Business Service Mapping Card -->
+                    <div class="col-lg-4 d-flex align-items-stretch">
+                        <div class="card card-margin">
+                            <div class="card-header no-border text-center">
+                                <h6 class="card-title fw-semibold mb-1">Business Service Mapping</h6>
+                                <p class="sub-info-text">Breakdown of Services by Mapping Completion</p>
+                            </div>
+                            <div class="card-body">
+                                <!-- Container for 3D Boxes -->
+                                <div class="row-container">
+                                    <!-- 3D Box 1 -->
+                                    <div class="rectangle-3d-box">
+                                        <h4 class="top-left-number">0</h4>
+                                        <p class="bottom-right-text">Fully Mapped</p>
+                                    </div>
+
+                                    <!-- 3D Box 2 -->
+                                    <div class="rectangle-3d-box">
+                                        <h4 class="top-left-number">0</h4>
+                                        <p class="bottom-right-text">Only Critical Assessment Required</p>
+                                    </div>
+
+                                    <!-- 3D Box 3 -->
+                                    <div class="rectangle-3d-box">
+                                        <h4 class="top-left-number">2</h4>
+                                        <p class="bottom-right-text">Mapping Incomplete</p>
+                                    </div>
+
+                                    <!-- 3D Box 4 -->
+                                    <div class="rectangle-3d-box">
+                                        <h4 class="top-left-number">25</h4>
+                                        <p class="bottom-right-text">Mapping Not Started</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-4">
+    <!-- Card with Two Tables -->
+    <div class="col-lg-8 d-flex align-items-stretch">
+        <div class="card card-margin w-100">
+            <div class="card-header no-border text-center">
+                <h6 class="card-title fw-semibold mb-1">Service Assessment Overview</h6>
+                <p class="sub-info-text">Comparative Analysis of Services</p>
+            </div>
+            <div class="card-body pt-0">
+                <!-- Container for Tables -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Table 1 -->
+                    <div class="table-responsive col-6 p-2">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Service 1</td>
+                                    <td><i class="bi bi-check-circle text-success"></i> Active</td>
+                                </tr>
+                                <tr>
+                                    <td>Service 2</td>
+                                    <td><i class="bi bi-x-circle text-danger"></i> Inactive</td>
+                                </tr>
+                                <tr>
+                                    <td>Service 3</td>
+                                    <td><i class="bi bi-check-circle text-success"></i> Active</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Table 2 -->
+                    <div class="table-responsive col-6 p-2">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Impact</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Service 1</td>
+                                    <td>High</td>
+                                </tr>
+                                <tr>
+                                    <td>Service 2</td>
+                                    <td>Medium</td>
+                                </tr>
+                                <tr>
+                                    <td>Service 3</td>
+                                    <td>Low</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Business Service Mapping Card -->
-        <div class="col-lg-4 d-flex align-items-stretch">
-            <div class="card card-margin">
-                <div class="card-header no-border text-center">
-                    <h6 class="card-title fw-semibold mb-1">Business Service Mapping</h6>
-                    <p class="sub-info-text">Breakdown of Services by Mapping Completion</p>
+    </div>
+    <!-- Pie Chart Card -->
+    <div class="col-lg-4 d-flex align-items-stretch">
+        <div class="card card-margin">
+            <div class="card-header no-border text-center">
+                <h6 class="card-title fw-semibold mb-1">Service Analysis</h6>
+                <p class="sub-info-text">Breakdown of Service Metrics</p>
+            </div>
+            <div class="card-body">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center">
+                        <div id="breakup"></div>
+                        <div id="breakup1"></div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <!-- Container for 3D Boxes -->
-                    <div class="row-container">
-                        <!-- 3D Box 1 -->
-                        <div class="rectangle-3d-box">
-                            <h4 class="top-left-number">0</h4>
-                            <p class="bottom-right-text">Fully Mapped</p>
-                        </div>
-
-                        <!-- 3D Box 2 -->
-                        <div class="rectangle-3d-box">
-                            <h4 class="top-left-number">0</h4>
-                            <p class="bottom-right-text">Only Critical Assessment Required</p>
-                        </div>
-
-                        <!-- 3D Box 3 -->
-                        <div class="rectangle-3d-box">
-                            <h4 class="top-left-number">2</h4>
-                            <p class="bottom-right-text">Mapping Incomplete</p>
-                        </div>
-
-                        <!-- 3D Box 4 -->
-                        <div class="rectangle-3d-box">
-                            <h4 class="top-left-number">25</h4>
-                            <p class="bottom-right-text">Mapping Not Started</p>
-                        </div>
+                <div class="col-12">
+                    <div class="d-flex justify-content-center">
+                        <div id="breakup2"></div>
+                        <div id="breakup3"></div>
                     </div>
                 </div>
             </div>
@@ -340,8 +497,7 @@
     </div>
 </div>
 
-
-
+            
         </div>
     </div>
     <script src="./libs/jquery/dist/jquery.min.js"></script>
@@ -358,7 +514,7 @@
     <!--<script src="/path/to/leaflet.js"></script>-->
     <!--<script src="./js/wb_dragdrop.js"></script>-->
     <script>
-
+        
     </script>
 </body>
 
