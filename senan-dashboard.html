@@ -13,14 +13,46 @@
     <!--<link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />-->
     <!--<link rel="stylesheet" href="/path/to/leaflet.css" />-->
 <style>
-    /* Parent Card Container Adjustments */
+    /* Container Adjustments for Cards */
     .card.card-margin {
         border: none;
         box-shadow: 0px 0px 10px rgba(82, 63, 105, 0.1);
         border-radius: 8px;
-        margin-bottom: 20px; /* Ensure uniform spacing between cards */
+        margin-bottom: 20px;
+    }
+    
+    /* Set equal height for the two main cards */
+    .card-margin {
+        min-height: 550px;
+        max-height: 550px; /* Ensures both main cards have a base height */
+    }
+    
+    /* Main Card Adjustment */
+    .card-header.no-border.text-center {
+        text-align: center;
+        margin-bottom: 10px;
     }
 
+    /* Container for 3D Boxes to be flexible */
+    .row-container {
+        display: flex;
+        flex-wrap: wrap; /* Ensure boxes wrap within container */
+        justify-content: space-evenly; /* Distribute space between boxes */
+        align-items: stretch; /* Make sure items fill the available vertical space */
+    }
+    
+    /* Card Container Adjustments */
+    .col-lg-8.d-flex.align-items-stretch,
+    .col-lg-4.d-flex.align-items-stretch {
+        display: flex;
+        align-items: stretch; /* Ensures both main cards have equal height */
+    }
+    
+    .card-body {
+        flex: 1;
+        padding: 20px; /* Adjust the card body padding for better spacing */
+    }
+    
     .card-header h6 {
         font-size: 1.25rem;
         font-weight: 600;
@@ -34,39 +66,37 @@
         display: block; /* Ensure it appears on a separate line */
     }
 
-    /* Flex Container Adjustments for Proper Alignment */
+    /* Container for 3D Boxes to be flexible */
     .row-container {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around; /* Adjust spacing around the boxes */
-        align-items: center;
+        flex-wrap: wrap; /* Ensure boxes wrap within container */
+        justify-content: space-evenly; /* Distribute space between boxes */
+        align-items: stretch; /* Make sure items fill the available vertical space */
     }
 
-    /* Ensure uniform square shape and consistent padding inside 3D boxes */
+    /* Adjusted to maintain uniform size */
     .rectangle-3d-box {
-        width: 160px; /* Square width */
-        height: 160px; /* Square height */
-        background: linear-gradient(145deg, #e6e6e6, #ffffff); /* 3D Effect */
+        width: calc(50% - 30px); /* Dynamically adjust the width based on container */
+        height: 170px; /* Set consistent height */
+        background: linear-gradient(145deg, #e6e6e6, #ffffff);
         box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
         border-radius: 15px;
         position: relative;
-        margin: 15px; /* Spacing between boxes */
+        margin: 10px; /* Uniform spacing between boxes */
         display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        padding: 10px; /* Uniform padding inside the box */
+        flex-direction: column; /* Arrange items vertically */
+        justify-content: space-between; /* Space between number and text */
+        align-items: center; /* Center items */
     }
     
-    /* Ensure the text is aligned correctly inside each box */
     .rectangle-3d-box h4 {
-        font-size: 3rem; /* Large number font size */
+        font-size: 3.5rem; /* Large number font size */
         font-weight: bold;
         color: #333;
         margin: 0;
         position: absolute;
-        top: 15px; /* Top-left positioning */
-        left: 15px;
+        top: 15px; /* Position to top-left */
+        left: 15px; /* Position to left */
     }
 
     .rectangle-3d-box p {
@@ -74,9 +104,8 @@
         margin: 0;
         color: #666;
         position: absolute;
-        left: 65px;
+        right: 15px; /* Align to bottom-right */
         bottom: 10px; /* Bottom-right positioning */
-        right: 10px;
     }
 
     /* Add hover effect for 3D look */
@@ -95,14 +124,16 @@
         margin: 0;
     }
     
-    /* Bottom-right small text in the box */
-    .bottom-right-text {
-        position: absolute;
-        bottom: 15px;
-        right: 15px;
-        font-size: 0.8rem; /* Smaller text */
+    /* Bottom-right description text */
+    .rectangle-3d-box p.bottom-right-text {
+        font-size: 0.65rem; /* Smaller text */
         margin: 0;
         color: #666;
+        position: absolute;
+        bottom: 10px;
+        left: 20px;
+        right: 10px; /* Positioned at the bottom-right */
+        max-width: calc(100% - 20px); /* Adjust width to prevent overflow */
     }
 </style>
 
@@ -223,13 +254,13 @@
             </header>
                      
 <div class="container-fluid">
-    <!--  Row 1 containing the two main cards side by side -->
-    <div class="row">
+    <!-- Main Row for Domain Monitoring and Business Service Mapping Cards -->
+    <div class="row g-4">
         <!-- Domain Monitoring Card -->
         <div class="col-lg-8 d-flex align-items-stretch">
-            <div class="card w-100">
+            <div class="card w-100 card-margin">
                 <div class="card-body">
-                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+                    <div class="d-sm-flex d-block align-items-center justify-content-between mb-4">
                         <div class="mb-3 mb-sm-0">
                             <h5 class="card-title fw-semibold">Domain Monitoring</h5>
                             <span class="fw-normal">Severity of impact</span>
@@ -255,12 +286,12 @@
                             </select>
                         </div>
                     </div>
-                    <div id="chart"></div>
+                    <div id="chart" style="height: 350px;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Business Service Mapping Card beside Domain Monitoring -->
+        <!-- Business Service Mapping Card -->
         <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card card-margin">
                 <div class="card-header no-border text-center">
@@ -268,7 +299,7 @@
                     <p class="sub-info-text">Breakdown of Services by Mapping Completion</p>
                 </div>
                 <div class="card-body">
-                    <!-- Row Container for 3D Boxes -->
+                    <!-- Container for 3D Boxes -->
                     <div class="row-container">
                         <!-- 3D Box 1 -->
                         <div class="rectangle-3d-box">
@@ -299,6 +330,8 @@
         </div>
     </div>
 </div>
+
+
 
         </div>
     </div>
