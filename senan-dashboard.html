@@ -13,12 +13,13 @@
     <!--<link rel="stylesheet" href="./libs/tabmaster/tabstyle.css" />-->
     <!--<link rel="stylesheet" href="/path/to/leaflet.css" />-->
 <style>
-    /* Container Adjustments for Cards */
+    /* Main Cards' Container Adjustments */
     .card.card-margin {
         border: none;
         box-shadow: 0px 0px 10px rgba(82, 63, 105, 0.1);
         border-radius: 8px;
         margin-bottom: 20px;
+        min-height: 600px; /* Set a consistent height */
     }
     
     /* Set equal height for the two main cards */
@@ -32,12 +33,17 @@
         text-align: center;
         margin-bottom: 10px;
     }
+    
+    /* Specific Alignment and Padding for Domain Monitoring Card */
+    #domain-monitoring-card {
+        padding: 20px; /* Adjust padding to reduce excess white space */
+    }
 
-    /* Container for 3D Boxes to be flexible */
+    /* Container for 3D Boxes */
     .row-container {
         display: flex;
-        flex-wrap: wrap; /* Ensure boxes wrap within container */
-        justify-content: space-evenly; /* Distribute space between boxes */
+        flex-wrap: wrap; /* Ensure the boxes wrap within the container */
+        justify-content: space-around; /* Evenly distribute boxes */
         align-items: stretch; /* Make sure items fill the available vertical space */
     }
     
@@ -74,10 +80,10 @@
         align-items: stretch; /* Make sure items fill the available vertical space */
     }
 
-    /* Adjusted to maintain uniform size */
+    /* Adjusted to maintain a square-like ratio */
     .rectangle-3d-box {
-        width: calc(50% - 30px); /* Dynamically adjust the width based on container */
-        height: 170px; /* Set consistent height */
+        width: calc(50% - 30px); /* Dynamically adjust the width */
+        height: 170px; /* Fixed height for consistent ratio */
         background: linear-gradient(145deg, #e6e6e6, #ffffff);
         box-shadow: 5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff;
         border-radius: 15px;
@@ -87,25 +93,28 @@
         flex-direction: column; /* Arrange items vertically */
         justify-content: space-between; /* Space between number and text */
         align-items: center; /* Center items */
+        padding: 20px; /* Adjust spacing inside the box */
     }
     
+    /* 3D Box Content Styles */
     .rectangle-3d-box h4 {
         font-size: 3.5rem; /* Large number font size */
         font-weight: bold;
         color: #333;
         margin: 0;
         position: absolute;
-        top: 15px; /* Position to top-left */
-        left: 15px; /* Position to left */
+        top: 15px; /* Adjust position */
+        left: 15px; /* Adjust position */
     }
 
+    /* Refined positioning for the bottom-right text */
     .rectangle-3d-box p {
         font-size: 0.75rem; /* Smaller text for description */
         margin: 0;
         color: #666;
         position: absolute;
-        right: 15px; /* Align to bottom-right */
-        bottom: 10px; /* Bottom-right positioning */
+        bottom: 15px; /* Align to bottom */
+        right: 15px; /* Align to the right */
     }
 
     /* Add hover effect for 3D look */
@@ -258,7 +267,7 @@
     <div class="row g-4">
         <!-- Domain Monitoring Card -->
         <div class="col-lg-8 d-flex align-items-stretch">
-            <div class="card w-100 card-margin">
+            <div class="card w-100 card-margin" id="domain-monitoring-card">
                 <div class="card-body">
                     <div class="d-sm-flex d-block align-items-center justify-content-between mb-4">
                         <div class="mb-3 mb-sm-0">
